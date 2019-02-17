@@ -5,6 +5,13 @@
  * Internal e-book format.
  */
 
+typedef enum
+{
+    EPUB = 0,
+    MOBI = 1,
+
+} book_type;
+
 typedef struct
 {
     unsigned    id;
@@ -15,11 +22,19 @@ typedef struct
 
 } ebook;
 
+int file_exists (char *filename);
+book_type get_file_type (char *filename);
+
+/*
+ * id is set to the id of the loaded book
+ */
+int load_book (char *filename, unsigned *id);
+
 /*
  * Initialise a new ebook and give its id.
  * Returns 0 on success.
  */
-int init_ebook (unsigned &id);
+int init_ebook (unsigned *id);
 
 /*
  * Gives a pointer to an ebook.
