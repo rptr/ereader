@@ -1,6 +1,8 @@
 #ifndef BOOK_H
 #define BOOK_H
 
+#include <stdbool.h>
+
 /*
  * Internal e-book format.
  */
@@ -15,14 +17,15 @@ typedef enum
 typedef struct
 {
     unsigned    id;
-    unsigned    size;
     char        *title;
     char        *author;
     char        *body;
 
 } ebook;
 
-int file_exists (char *filename);
+int num_books;
+
+bool file_exists (char *filename);
 book_type get_file_type (char *filename);
 
 /*
@@ -41,5 +44,7 @@ int init_ebook (unsigned *id);
  * Returns 0 on success.
  */
 int get_ebook (unsigned id, ebook *book);
+
+int add_section (ebook *book, char *text);
 
 #endif
