@@ -158,6 +158,9 @@ int load_epub (char *filename, ebook *book)
         zip_close(fd);    
     }
 
+    // TEMP
+    set_title(book, filename);
+
     printf("EPUB: successfully loaded file %s\n", filename);
     return 0;
 }

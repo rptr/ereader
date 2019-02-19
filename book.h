@@ -18,16 +18,24 @@ typedef enum
 typedef struct
 {
     unsigned    id;
-    char        *title;
+    const char        *title;
     char        *author;
     char        *body;
 
 } ebook;
 
-int num_books;
+extern ebook *books;
+extern int num_books;
+extern int max_books; 
 
 bool file_exists (char *filename);
+const char *get_file_extension (const char *filename);
 book_type get_file_type (char *filename);
+
+/*
+ *
+ */
+ebook *new_book ();
 
 /*
  * id is set to the id of the loaded book
@@ -46,6 +54,16 @@ int init_ebook (unsigned *id);
  */
 int get_ebook (unsigned id, ebook *book);
 
+/*
+ *
+ */
+void get_all_books (ebook **books_r, int *num_books_r);
+
 int add_section (ebook *book, char *text);
+
+/*
+ * Returns title of book.
+ */
+const char *book_title (ebook *book);
 
 #endif
