@@ -135,8 +135,14 @@ int load_epub (char *filename, ebook *book)
                         char *file = malloc(len * sizeof(char));;
                         strncpy(file, buf + start, len);
                         file[len] = '\0';
-                        load_file(fd, book, file);
+                        int success = load_file(fd, book, file);
                         free(file);
+
+                        if (success != 0)
+                        {
+                            return 6;
+                        }
+
                         break;
                     }
                 }

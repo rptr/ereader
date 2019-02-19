@@ -2,15 +2,31 @@
 #include "epub.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 bool file_exists (char *filename)
 {
     return 0;
 }
 
+// TODO: check actual file internals to see if it's an epub, not just file-ending
 book_type get_file_type (char *filename)
 {
-    return EPUB;
+    char *p = strstr(filename, ".epub\0");
+
+    if (p != NULL)
+    {
+        return EPUB;
+    }
+
+    p = strstr(filename, ".mobi\0");
+
+    if (p != NULL)
+    {
+        return MOBI;
+    }
+
+    return INVALID;
 }
 
 int load_book (char *filename, unsigned *id)
@@ -33,7 +49,7 @@ int load_book (char *filename, unsigned *id)
 //            load_mobi(filename, &book);
             break;
         default:
-            // cannot load file type
+            // can't load format / not an ebook
             break;
     }
 
