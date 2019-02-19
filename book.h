@@ -11,6 +11,7 @@ typedef enum
 {
     EPUB = 0,
     MOBI = 1,
+    INVALID,
 
 } book_type;
 
