@@ -3,6 +3,7 @@
 #include <stdbool.h>
 
 #include "term_ui.h"
+#include "book.h"
 
 int offset = 0;
 
@@ -30,7 +31,19 @@ int input (char i)
 
 int list_titles ()
 {
-    printf("1. asdads \n2. asdasda \n3. jzxijxz\n");
+    ebook *books;
+    int num_books;
+
+    get_all_books(&books, &num_books);
+
+    printf("LIBRARY | %d titles  | \n", num_books);
+
+    for (int i = 0; i < num_books; i ++)
+    {
+        const char *title = book_title(&books[i]);
+        printf("%d: %s\n", i + 1, title);
+    }
+
     return 0;
 }
 
