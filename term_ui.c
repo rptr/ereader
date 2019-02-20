@@ -19,12 +19,11 @@ int ui_start ()
     initscr();
     noecho();
 
-    list_titles();
-
     while (run)
     {
-        char i = getchar();
+        list_titles();
 
+        char i = getchar();
         input(i);
     }
 
@@ -79,7 +78,36 @@ void clear_screen ()
 
 int input (char i)
 {
-    printf("in: %d\n", i);
+    switch (i)
+    {
+        // up arrow
+        case 'k':
+            scroll_up();
+            break;
+        // down arrow
+        case 'j':
+            scroll_down();
+            break;
+        // left arrow
+        case 61:
+            break;
+        // right arrow
+        case 63:
+            break;
+
+        // page up
+        case 'J':
+            page_up();
+            break;
+        // page down
+        case 'K':
+            page_down();
+            break;
+
+        default:
+            break;
+    }
+
     return 0;
 }
 
@@ -114,12 +142,28 @@ int display_title (unsigned book_id)
 
 void scroll_up ()
 {
+    if (state == LIBRARY)
+    {
+        selection --;
 
+        if (selection < 0)
+        {
+            selection = 0;
+        }
+    }
 }
 
 void scroll_down ()
 {
+    if (state == LIBRARY)
+    {
+        selection ++;
 
+        if (selection >= get_num_books())
+        {
+            selection = get_num_books() - 1;
+        }
+    }
 }
 
 void page_up ()
