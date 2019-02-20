@@ -110,10 +110,9 @@ int get_ebook (unsigned id, ebook *book)
     return 1;
 }
 
-void get_all_books (ebook **books_r, int *num_books_r)
+const char *book_title (book id)
 {
-    *num_books_r = num_books;
-    *books_r = books;
+    return books[id].title;
 }
 
 int init_ebook (unsigned *id)
@@ -123,14 +122,17 @@ int init_ebook (unsigned *id)
     return 1;
 }
 
-int set_title (ebook *book, const char *text)
+int set_title (book id, const char *text)
 {
     if (text == NULL)
     {
+        printf("book.c::set_title(): NULL text\n");
         return 1;
     }
 
-    book->title = text;
+    books[id].title = malloc(strlen(text) * sizeof(char));
+    strcpy(books[id].title, text);
+    printf("set_title: %d %s\n", id, text);
     return 0;
 }
 
@@ -148,10 +150,5 @@ int add_section (ebook *book, char *text)
     book->body = text;
 
     return 0;
-}
-
-const char *book_title (ebook *book)
-{
-    return book->title;
 }
 

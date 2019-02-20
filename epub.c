@@ -159,7 +159,7 @@ int load_epub (char *filename, ebook *book)
     }
 
     // TEMP
-    set_title(book, filename);
+    set_title(book->id, filename);
 
     printf("EPUB: successfully loaded file %s\n", filename);
     return 0;
