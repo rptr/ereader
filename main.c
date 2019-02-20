@@ -24,7 +24,7 @@ void find_titles_in_dir (const char *dir_name)
 
     if (dir == NULL)
     {
-        printf("cannot open directory %s\n", dir_name);
+        printf("cannot open directory %s.\n", dir_name);
         return;
     }
 
@@ -94,16 +94,35 @@ void read_config ()
     free(path);
 }
 
+int is_white (char c)
+{
+    return c == ' ' || c == '\n';
+}
+
 void read_config_line (const char *line)
 {
     char *p = strstr(line, "home=");
 
     if (p != NULL)
     {
-        int len = strlen(p + 5);
-        home_dir = malloc(len * sizeof(char));
-        strcpy(home_dir, p + 5);
-        printf("home directory %s\n", home_dir);
+        while ((char)*p != '/')
+        {
+            p ++;
+        }
+
+        char *end = p + strlen(p) - 1;
+
+        while (is_white((char)*end) && end > p)
+        {
+            end --;
+        }
+
+        end[1] = '\0';
+
+//        int len = strlen(p + 5);
+        home_dir = malloc(strlen(p) * sizeof(char));
+        strcpy(home_dir, p);
+        printf("home directory %s.\n", p);
     }
 }
 
@@ -127,6 +146,7 @@ int main (int argc, char **argv)
 
     } else
     {
+        find_titles_in_dir(home_dir);
         find_local_titles();
     }
 
