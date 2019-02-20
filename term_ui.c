@@ -99,7 +99,7 @@ int list_titles ()
             selected = 'X';
         }
 
-        mvprintw(1, 1 + i, "%c %d: %s\n", selected, i + 1, title);
+        mvprintw(i + 1, 1, "%c %d: %s\n", selected, i + 1, title);
     }
 
     refresh();
