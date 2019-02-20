@@ -2,6 +2,8 @@
 #define TERM_UI_H
 
 int ui_start ();
+
+void clear_screen ();
 int input (char input);
 int list_titles ();
 int display_title (unsigned book_id);
