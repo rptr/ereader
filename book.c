@@ -91,12 +91,14 @@ int load_book (char *filename, unsigned *id)
         return 2;
     }
 
-    ebook *book = new_book();
-    bookid bid = book->id;
+    ebook *book;
+    bookid bid;
 
     switch (type)
     {
         case EPUB:
+            book = new_book();
+            bid = book->id;
             load_epub(filename, bid);
             break;
         case MOBI:
