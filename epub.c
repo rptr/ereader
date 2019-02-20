@@ -24,7 +24,7 @@ int get_file_list (char **filenames)
     return 0;
 }
 
-int load_epub (char *filename, ebook *book)
+int load_epub (char *filename, bookid book)
 {
     int error;
 
@@ -159,13 +159,13 @@ int load_epub (char *filename, ebook *book)
     }
 
     // TEMP
-    set_title(book->id, filename);
+    set_title(book, filename);
 
     printf("EPUB: successfully loaded file %s\n", filename);
     return 0;
 }
 
-int load_file (zip_t *zip, ebook *book, char *filename)
+int load_file (zip_t *zip, bookid book, char *filename)
 {
     zip_file_t *file = zip_fopen(zip, filename, ZIP_FL_UNCHANGED);
 
