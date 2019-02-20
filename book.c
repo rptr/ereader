@@ -16,7 +16,7 @@ bool file_exists (char *filename)
 const char *get_file_extension (const char *filename)
 {
     int len = strlen(filename);
-    char *ext = malloc(4 * sizeof(char));
+    char *ext = malloc(5 * sizeof(char));
 
     for (int i = 0; i < len; i ++)
     {
@@ -27,6 +27,8 @@ const char *get_file_extension (const char *filename)
 
         ext[3] = filename[i];
     }
+
+    ext[4] = '\0';
 
     return ext;
 }
@@ -77,6 +79,7 @@ int load_book (char *filename, unsigned *id)
 {
     if (file_exists(filename) != 0)
     {
+        printf("no such file %s\n", filename);
         return 1;
     }
 
@@ -84,6 +87,7 @@ int load_book (char *filename, unsigned *id)
 
     if (type == INVALID)
     {
+        printf("can't load file %s, invalid type\n", filename);
         return 2;
     }
 
@@ -151,4 +155,10 @@ int add_section (ebook *book, char *text)
 
     return 0;
 }
+
+unsigned get_num_books ()
+{
+    return num_books;
+}
+
 

@@ -1,6 +1,17 @@
 #ifndef TERM_UI_H
 #define TERM_UI_H
 
+extern int selection;
+
+typedef enum
+{
+    LIBRARY,
+    BOOK
+
+} State;
+
+extern State state;
+
 int ui_start ();
 
 void clear_screen ();

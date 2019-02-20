@@ -9,6 +9,8 @@
 #include "book.h"
 
 int offset = 0;
+int selection = 0;
+State state = LIBRARY;
 
 int ui_start ()
 {
@@ -85,12 +87,19 @@ int list_titles ()
 {
     clear_screen();
 
-    int num_books = 1;
+    int num_books = get_num_books();
 
     for (int i = 0; i < num_books; i ++)
     {
         const char *title = book_title(i);
-        mvprintw(1, 1 + i, "%d: %s\n", i + 1, title);
+        char selected = ' ';
+
+        if (selection == i)
+        {
+            selected = 'X';
+        }
+
+        mvprintw(1, 1 + i, "%c %d: %s\n", selected, i + 1, title);
     }
 
     refresh();
