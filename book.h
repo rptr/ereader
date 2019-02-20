@@ -18,13 +18,13 @@ typedef enum
 typedef struct
 {
     unsigned    id;
-    const char  *title;
+    char        *title;
     char        *author;
     char        *body;
 
 } ebook;
 
-typedef unsigned book;
+typedef unsigned bookid;
 
 extern ebook *books;
 extern int num_books;
@@ -56,15 +56,15 @@ int init_ebook (unsigned *id);
  */
 int get_ebook (unsigned id, ebook *book);
 
-int add_section (ebook *book, char *text);
+int add_section (bookid book, char *text);
 
-int set_title (book id, const char *text);
+int set_title (bookid id, const char *text);
 
 unsigned get_num_books ();
 
 /*
  * Returns title of book.
  */
-const char *book_title (book id);
+const char *book_title (bookid id);
 
 #endif

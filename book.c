@@ -71,6 +71,7 @@ ebook *new_book ()
 
     resize_library();
     book = &books[num_books++];
+    book->id = num_books - 1;
 
     return book;
 }
@@ -87,16 +88,16 @@ int load_book (char *filename, unsigned *id)
 
     if (type == INVALID)
     {
-        printf("can't load file %s, invalid type\n", filename);
         return 2;
     }
 
     ebook *book = new_book();
+    bookid bid = book->id;
 
     switch (type)
     {
         case EPUB:
-            load_epub(filename, book);
+            load_epub(filename, bid);
             break;
         case MOBI:
 //            load_mobi(filename, &book);
@@ -114,7 +115,7 @@ int get_ebook (unsigned id, ebook *book)
     return 1;
 }
 
-const char *book_title (book id)
+const char *book_title (bookid id)
 {
     return books[id].title;
 }
@@ -126,7 +127,7 @@ int init_ebook (unsigned *id)
     return 1;
 }
 
-int set_title (book id, const char *text)
+int set_title (bookid id, const char *text)
 {
     if (text == NULL)
     {
@@ -134,16 +135,16 @@ int set_title (book id, const char *text)
         return 1;
     }
 
+    printf("set_title: %d %s\n", id, text);
     books[id].title = malloc(strlen(text) * sizeof(char));
     strcpy(books[id].title, text);
-    printf("set_title: %d %s\n", id, text);
     return 0;
 }
 
 /*
  * 
  */
-int add_section (ebook *book, char *text)
+int add_section (bookid book, char *text)
 {
     if (text == NULL)
     {
@@ -151,7 +152,7 @@ int add_section (ebook *book, char *text)
         return 1;
     }
 
-    book->body = text;
+    books[book].body = text;
 
     return 0;
 }
