@@ -72,6 +72,8 @@ ebook *new_book ()
     resize_library();
     book = &books[num_books++];
     book->id = num_books - 1;
+    book->body = NULL;
+    book->title = NULL;
 
     return book;
 }
@@ -179,7 +181,62 @@ int add_section (bookid book, char *text)
         return 1;
     }
 
-    books[book].body = text;
+    if (books[book].body != NULL)
+    {
+        char *new;
+        int old_len;
+        int new_len;
+
+        old_len = strlen(books[book].body);
+        new_len = strlen(text);
+        new = malloc(old_len + new_len);
+        strncpy(new, books[book].body, old_len);
+        strncpy(new + old_len, text, new_len);
+    
+        free(books[book].body);
+        books[book].body = new;
+
+    } else
+    {
+        books[book].body = malloc(strlen(text));
+        strcpy(books[book].body, text);
+    }
+
+
+    printf("add section %d\n", strlen(text));
+
+    return 0;
+}
+
+int get_page (bookid book, char **text, int page, int length)
+{
+    int offset;
+    int max_len;
+    ebook ebook = books[book];
+
+    if (ebook.body == NULL)
+    {
+        printf("book.c: requested book has no text.\n");
+        return 1;
+    }
+
+    max_len = strlen(ebook.body);
+    offset = (page - 1) * length;
+
+    if (offset > max_len)
+    {
+        printf("book.c: requested page outside of book %d %d\n", max_len, offset);
+        return 2;
+    }
+
+    if (offset + length > max_len)
+    {
+        length = max_len - offset;
+    }
+
+    *text = ebook.body + offset;
+//    *text = malloc(length); 
+//    strncpy(*text, ebook.body + offset, length);
 
     return 0;
 }

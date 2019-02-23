@@ -31,6 +31,7 @@ int input (char input);
  */
 int list_titles ();
 int display_book ();
+void display_book_text (const char *text);
 
 void scroll_up ();
 void scroll_down ();
