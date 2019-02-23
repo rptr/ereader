@@ -212,18 +212,20 @@ int display_book ()
 
     if (result == 0 && text != NULL)
     {
+        int y;
+        int line = 0;
+
         for (int i = 0; i < h2; i ++)
         {
-            for (int j = 0; j < w2; j ++)
-            {
-                char c = text[i * h2 + j];
-    
-                if (c == '\n')
-                    i ++;
-    
-                mvaddch(1 + i + padding_y, 1 + j + padding_x, c);
-            }
+            y = line + padding_y + 1;
+            mvprintw(y, padding_x, "%*.*s\n", w2, w2, text + i * w2);
+
+            if (strstr(text + i * w2, "\n") < text + i * w2 + w2)
+                line ++;
+
+            line ++;
         }
+
     
         refresh();
 
