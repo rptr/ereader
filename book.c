@@ -192,7 +192,7 @@ int add_section (bookid book, char *text)
         new = malloc(old_len + new_len);
         strncpy(new, books[book].body, old_len);
         strncpy(new + old_len, text, new_len);
-        new[new_len + old_len] = '\0';
+        new[new_len + old_len - 1] = '\0';
     
         free(books[book].body);
 
@@ -221,7 +221,7 @@ int get_page (bookid book, char **text, int page, int length)
         return 2;
     }
 
-    ebook = &ebooks[book];
+    ebook = &books[book];
 
     if (ebook->body == NULL)
     {
@@ -230,7 +230,7 @@ int get_page (bookid book, char **text, int page, int length)
     }
 
     max_len = strlen(ebook->body);
-    offset = (page - 1) * length;
+    offset = (page) * length;
 
     if (offset > max_len)
     {
