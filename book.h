@@ -39,6 +39,8 @@ book_type get_file_type (char *filename);
  */
 ebook *new_book ();
 
+void remove_book (bookid id);
+
 /*
  * id is set to the id of the loaded book
  */
