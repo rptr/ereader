@@ -76,6 +76,15 @@ ebook *new_book ()
     return book;
 }
 
+// XXX only works for books at the end of the array
+void remove_book (bookid id)
+{
+    if (id == num_books - 1)
+    {
+        num_books --;
+    }
+}
+
 int load_book (char *filename, unsigned *id)
 {
     if (file_exists(filename) != 0)
@@ -93,13 +102,14 @@ int load_book (char *filename, unsigned *id)
 
     ebook *book;
     bookid bid;
+    int result = 0;
 
     switch (type)
     {
         case EPUB:
             book = new_book();
             bid = book->id;
-            load_epub(filename, bid);
+            result = load_epub(filename, bid);
             break;
         case MOBI:
 //            load_mobi(filename, &book);
@@ -107,6 +117,11 @@ int load_book (char *filename, unsigned *id)
         default:
             // can't load format / not an ebook
             break;
+    }
+
+    if (result != 0)
+    {
+        remove_book(bid);
     }
 
     return 0;
