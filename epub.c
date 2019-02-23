@@ -27,6 +27,8 @@ int get_file_list (char **filenames)
 int load_epub (char *filename, bookid book)
 {
     int error;
+    int result;
+    char *opf_filename = NULL;
 
     zip_t *fd = zip_open(filename, ZIP_RDONLY, &error);
 
@@ -36,60 +38,9 @@ int load_epub (char *filename, bookid book)
 
     } else 
     {
-        zip_file_t *root_file = zip_fopen(fd, "META-INF/container.xml", ZIP_FL_UNCHANGED);
-//        zip_int64_t container_id = zip_name_locate(fd, "container,xml");
+        result = find_rootfile(fd, &opf_filename);
 
-        if (root_file == NULL)
-        {
-            printf("can't load epub: no container.xml\n");
-            return 1;
-        }
-
-        char *opf_filename = NULL;
-        char buf[1024];
-        int size;
-
-        // find the .opf file which lists all the other content
-        while ((size = zip_fread(root_file, buf, 1024)) > 0)
-        {
-            char *pos;
-            pos = strstr(buf, "rootfile full-path");
-
-            if (pos == NULL)
-            {
-                // no rootfile path
-                printf("bad container.xml\n");
-                return 4;
-            }
-
-            int index = pos - buf;
-            int path_len = 0, path_start = 0;
-
-            for (; index < size; index ++)
-            {
-                if (buf[index] == '"' && path_start == 0)
-                    path_start = index + 1;
-
-                else if (buf[index] == '"')
-                {
-                    path_len = index - path_start;
-                    opf_filename = malloc(path_len * sizeof(char));
-                    strncpy(opf_filename, buf + path_start, path_len);
-                    opf_filename[path_len] = '\0';
-                    break;
-                }
-            }
-
-            if (path_len == 0)
-            {
-                printf("bad container.xml\n");
-                return 5;
-            }
-        }
-
-        zip_fclose(root_file);
-
-        if (opf_filename == NULL)
+        if (opf_filename == NULL || result != 0)
         {
             printf("can't find .opf file\n");
             return 2;
@@ -107,15 +58,18 @@ int load_epub (char *filename, bookid book)
         // get the actual html page file names
         char *pos;
         int offset = 0;
+        int size;
+        char buf[1024];
 
         while ((size = zip_fread(opf_file, buf + offset, 1024 - offset)) > 0)
         {
             while (offset < size)
             {
-                pos = strstr(buf + offset, "item href");
+                pos = strstr(buf + offset, ".html");
 
                 if (pos == NULL)
                 {
+                    printf("can't find html\n");
                     break;
                 }
 
@@ -123,35 +77,42 @@ int load_epub (char *filename, bookid book)
 
                 int start = 0, len;
 
-                for (; offset < size; offset ++)
+                for (; offset > 0; offset --)
                 {
-                    if (buf[offset] == '"' && start == 0)
+                    if (buf[offset] == '"')
                     {
                         start = offset + 1;
-
-                    } else if (buf[offset] == '"')
-                    {
-                        len = offset - start;
+                        // + 4 to account for the fact that we start at the '.'
+                        // of ".html"
+                        len = pos - buf - start + 5;
                         char *file = malloc(len * sizeof(char));;
                         strncpy(file, buf + start, len);
                         file[len] = '\0';
                         int success = load_file(fd, book, file);
                         free(file);
+                        offset = pos - buf + len;
 
                         if (success != 0)
                         {
+                            printf("could not load file %s\n", file);
                             return 6;
                         }
 
+                        break;
+                    }
+
+                    if (offset == 0)
+                    {
+                        offset = size;
                         break;
                     }
                 }
             }
 
             // we save the last little bit of the previous buffer when reading
-            // a new chunk
-            offset = 1024 - offset;
-            strncpy(buf, buf, offset);
+            // a new chunk (in case there's a file/link in the last bit)
+//            offset = 1024 - offset;
+//            strncpy(buf, buf, offset);
         }
 
         zip_fclose(opf_file);
@@ -165,6 +126,61 @@ int load_epub (char *filename, bookid book)
     return 0;
 }
 
+int find_rootfile (zip_t *zip, char **rootfile)
+{
+    zip_file_t *root_file = zip_fopen(zip, "META-INF/container.xml", ZIP_FL_UNCHANGED);
+
+    if (root_file == NULL)
+    {
+        printf("can't load epub: no container.xml\n");
+        return 1;
+    }
+
+    char buf[1024];
+    int size;
+
+    // find the .opf file which lists all the other content
+    while ((size = zip_fread(root_file, buf, 1024)) > 0)
+    {
+        char *pos;
+        pos = strstr(buf, "rootfile full-path");
+
+        if (pos == NULL)
+        {
+            // no rootfile path
+            printf("bad container.xml\n");
+            return 4;
+        }
+
+        int index = pos - buf;
+        int path_len = 0, path_start = 0;
+
+        for (; index < size; index ++)
+        {
+            if (buf[index] == '"' && path_start == 0)
+                path_start = index + 1;
+
+            else if (buf[index] == '"')
+            {
+                path_len = index - path_start;
+                *rootfile = malloc((path_len + 1) * sizeof(char));
+                strncpy(*rootfile, buf + path_start, path_len);
+                (*rootfile)[path_len] = '\0';
+                break;
+            }
+        }
+
+        if (path_len == 0)
+        {
+            printf("bad container.xml\n");
+            return 5;
+        }
+    }
+
+    zip_fclose(root_file);
+    return 0;
+}
+
 int load_file (zip_t *zip, bookid book, char *filename)
 {
     zip_file_t *file = zip_fopen(zip, filename, ZIP_FL_UNCHANGED);
@@ -175,7 +191,6 @@ int load_file (zip_t *zip, bookid book, char *filename)
         return 1;
     }
 
-    printf("epub: load file %s\n", filename);
 
     char *section = NULL;
     char buf[2048];
@@ -183,7 +198,7 @@ int load_file (zip_t *zip, bookid book, char *filename)
 
     while ((size = zip_fread(file, buf, 2048)) > 0)
     {
-        char *temp = malloc((total_size + size) * sizeof(char));
+        char *temp = malloc((total_size + size + 1) * sizeof(char));
        
         if (section != NULL)
         {
@@ -207,6 +222,8 @@ int load_file (zip_t *zip, bookid book, char *filename)
     section[total_size] = '\0';
     html_to_plain(section, &plain);
     add_section(book, plain);
+
+    printf("epub: loaded file %s\n", filename);
 
     zip_fclose(file);
     return 0;
