@@ -197,7 +197,6 @@ int display_book ()
     int result;
     const char *title = get_title(current_book);
     clear_screen(title);
-    int len;
     int w;
     int h;
     int w2;
@@ -211,10 +210,8 @@ int display_book ()
 
     result = get_page(current_book, &text, page, length);
 
-    if (result == 0)
+    if (result == 0 && text != NULL)
     {
-        len = strlen(text);
-    
         for (int i = 0; i < h2; i ++)
         {
             for (int j = 0; j < w2; j ++)
@@ -229,6 +226,7 @@ int display_book ()
         }
     
         refresh();
+
     } else
     {
         printf("can't display book\n");

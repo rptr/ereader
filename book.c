@@ -197,15 +197,14 @@ int add_section (bookid book, char *text)
         free(books[book].body);
 
         books[book].body = new;
+        printf("append to book %d body %d\n", book, strlen(books[book].body));
 
     } else
     {
         books[book].body = malloc(strlen(text));
         strcpy(books[book].body, text);
+        printf("new book body %d\n", strlen(text));
     }
-
-
-    printf("add section %d\n", strlen(text));
 
     return 0;
 }
@@ -214,15 +213,23 @@ int get_page (bookid book, char **text, int page, int length)
 {
     int offset;
     int max_len;
-    ebook ebook = books[book];
+    ebook *ebook;
 
-    if (ebook.body == NULL)
+    if (book >= num_books)
+    {
+        printf("book.c::get_page(): invalid book %d\n", book);
+        return 2;
+    }
+
+    ebook = &ebooks[book];
+
+    if (ebook->body == NULL)
     {
         printf("book.c: requested book has no text.\n");
         return 1;
     }
 
-    max_len = strlen(ebook.body);
+    max_len = strlen(ebook->body);
     offset = (page - 1) * length;
 
     if (offset > max_len)
@@ -236,7 +243,7 @@ int get_page (bookid book, char **text, int page, int length)
         length = max_len - offset;
     }
 
-    *text = ebook.body + offset;
+    *text = ebook->body + offset;
 //    *text = malloc(length); 
 //    strncpy(*text, ebook.body + offset, length);
 
