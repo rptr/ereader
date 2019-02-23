@@ -60,6 +60,8 @@ int add_section (bookid book, char *text);
 
 int set_title (bookid id, const char *text);
 
+const char *get_title (bookid id);
+
 unsigned get_num_books ();
 
 /*
