@@ -143,6 +143,16 @@ int set_title (bookid id, const char *text)
     return 0;
 }
 
+const char *get_title (bookid id)
+{
+    if (id >= num_books)
+    {
+        return "INVALID TITLE";
+    }
+
+    return books[id].title;
+}
+
 /*
  * 
  */

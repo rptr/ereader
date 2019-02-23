@@ -1,7 +1,11 @@
 #ifndef TERM_UI_H
 #define TERM_UI_H
 
+#include "book.h"
+
+extern bookid current_book;
 extern int selection;
+extern int last_input;
 
 typedef enum
 {
@@ -14,17 +18,28 @@ extern State state;
 
 int ui_start ();
 
-void clear_screen ();
+/*
+ * Clear terminal and add border, title bar
+ * title: text at top of screen
+ */
+void clear_screen (const char *title);
+
 int input (char input);
+
+/*
+ * Display the user's library.
+ */
 int list_titles ();
-int display_title (unsigned book_id);
+int display_book ();
 
 void scroll_up ();
 void scroll_down ();
 void page_up ();
 void page_down ();
 
-int select_title ();
+/*
+ */
+void select_title();
 
 void quit();
 

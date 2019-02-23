@@ -10,6 +10,8 @@
 
 int offset = 0;
 int selection = 0;
+bookid current_book = 0;
+int last_input = 0;
 State state = LIBRARY;
 
 int ui_start ()
@@ -21,10 +23,22 @@ int ui_start ()
 
     while (run)
     {
-        list_titles();
+        if (LIBRARY == state)
+        {
+            list_titles();
+        }
+
+        if (BOOK == state)
+        {
+            display_book();
+        }
 
         char i = getchar();
-        input(i);
+
+        if (input(i) != 0)
+        {
+            run = false;
+        }
     }
 
     endwin();
@@ -32,7 +46,7 @@ int ui_start ()
     return 0;
 }
 
-void clear_screen ()
+void clear_screen (const char *title_full)
 {
     int w, h;
 
@@ -41,10 +55,15 @@ void clear_screen ()
     clear();
 
     const char app[7] = "ereader";
+
+    // TODO truncate length depending on width of terminal
+    char *title = malloc(20 * sizeof(char));
+    strncpy(title, title_full, 20);
     int title_len = 20;
-    const char title[20] = "some book";
+
     const char version[3] = "0.1";
     char *top = malloc(w * sizeof(char));
+    // 178 = solid block
     char border = (char)178;
 
     // top bar
@@ -78,13 +97,17 @@ void clear_screen ()
 
 int input (char i)
 {
+    last_input = i;
+
     switch (i)
     {
         // up arrow
+        case 65:
         case 'k':
             scroll_up();
             break;
         // down arrow
+        case 66:
         case 'j':
             scroll_down();
             break;
@@ -104,6 +127,15 @@ int input (char i)
             page_down();
             break;
 
+        // enter
+        case 13:
+            select_title();
+            break;
+
+        case 'q':
+            return 1;
+            break;
+
         default:
             break;
     }
@@ -113,13 +145,22 @@ int input (char i)
 
 int list_titles ()
 {
-    clear_screen();
+    clear_screen("Library");
 
     int num_books = get_num_books();
+    int w, h;
+
+    getmaxyx(stdscr, h, w);
 
     for (int i = 0; i < num_books; i ++)
     {
         const char *title = book_title(i);
+
+        if (NULL == title)
+        {
+            continue;
+        }
+
         char selected = ' ';
 
         if (selection == i)
@@ -127,16 +168,33 @@ int list_titles ()
             selected = 'X';
         }
 
-        mvprintw(i + 1, 1, "%c %d: %s\n", selected, i + 1, title);
+        int max = w - 20;
+        char *title_trunc = malloc(max * sizeof(char));
+        strncpy(title_trunc, title, max);
+        title_trunc[max - 1] = '\0';
+        mvprintw(i + 1, 1, "%c %d: %s", selected, i + 1, title_trunc);
+        free(title_trunc);
     }
+
+    // show input in bottom left
+    char str[10];
+    sprintf(str, "%d", last_input);
+
+    getmaxyx(stdscr, h, w);
+    mvprintw(h - 1, 1, str); 
 
     refresh();
 
     return 0;
 }
 
-int display_title (unsigned book_id)
+int display_book ()
 {
+    const char *title = get_title(current_book);
+    clear_screen(title);
+
+
+
     return 0;
 }
 
@@ -176,9 +234,13 @@ void page_down ()
 
 }
 
-int select_title ()
+void select_title ()
 {
-    return 0;
+    if (LIBRARY == state)
+    {
+        current_book = selection;
+        state = BOOK;
+    }
 }
 
 void quit ()
