@@ -192,8 +192,10 @@ int add_section (bookid book, char *text)
         new = malloc(old_len + new_len);
         strncpy(new, books[book].body, old_len);
         strncpy(new + old_len, text, new_len);
+        new[new_len + old_len] = '\0';
     
         free(books[book].body);
+
         books[book].body = new;
 
     } else
