@@ -60,6 +60,14 @@ int get_ebook (unsigned id, ebook *book);
 
 int add_section (bookid book, char *text);
 
+/*
+ * Copies a page of length <length> into <text> with offset <page> * <length>
+ * length: in characters
+ * page: starts from 1
+ * Returns 0 on success.
+ */
+int get_page (bookid book, char **text, int page, int length);
+
 int set_title (bookid id, const char *text);
 
 const char *get_title (bookid id);

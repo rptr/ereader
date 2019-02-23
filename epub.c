@@ -198,6 +198,7 @@ int load_file (zip_t *zip, bookid book, char *filename)
 
     if (section == NULL)
     {
+        printf("epub.c::load_file(): no text loaded\n");
         return 1;
     }
 

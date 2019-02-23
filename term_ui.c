@@ -8,7 +8,7 @@
 #include "term_ui.h"
 #include "book.h"
 
-int offset = 0;
+int book_page = 0;
 int selection = 0;
 bookid current_book = 0;
 int last_input = 0;
@@ -190,12 +190,52 @@ int list_titles ()
 
 int display_book ()
 {
+    char *text = NULL;
+    int page;
+    int length;
+    int result;
     const char *title = get_title(current_book);
     clear_screen(title);
 
+    page = book_page;
+    length = 100;
 
+    result = get_page(current_book, &text, page, length);
+
+    if (result == 0)
+    {
+        display_book_text(text); 
+
+    } else
+    {
+        printf("can't display book\n");
+    }
 
     return 0;
+}
+
+void display_book_text (const char *text)
+{
+    int len;
+    int w;
+    int h;
+    int w2;
+    int h2;
+   
+    getmaxyx(stdscr, h, w);
+    len = strlen(text);
+    w2 = w - 2;
+    h2 = h - 2;
+
+    for (int i = 0; i < h2; i ++)
+    {
+        for (int j = 0; j < w2; j ++)
+        {
+            mvaddch(1 + i, 1 + j, text[i * h2 + j]);
+        }
+    }
+
+    refresh();
 }
 
 void scroll_up ()
@@ -206,7 +246,17 @@ void scroll_up ()
 
         if (selection < 0)
         {
-            selection = 0;
+            selection = get_num_books() - 1;
+        }
+    }
+
+    if (state == BOOK)
+    {
+        book_page --;
+
+        if (book_page < 0)
+        {
+            book_page = 0;
         }
     }
 }
@@ -219,8 +269,13 @@ void scroll_down ()
 
         if (selection >= get_num_books())
         {
-            selection = get_num_books() - 1;
+            selection = 0;
         }
+    }
+
+    if (state == BOOK)
+    {
+        book_page ++;
     }
 }
 
