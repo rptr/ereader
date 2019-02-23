@@ -7,6 +7,7 @@
 
 #include "term_ui.h"
 #include "book.h"
+#include "settings.h"
 
 int book_page = 0;
 int selection = 0;
@@ -196,26 +197,6 @@ int display_book ()
     int result;
     const char *title = get_title(current_book);
     clear_screen(title);
-
-    page = book_page;
-    length = 100;
-
-    result = get_page(current_book, &text, page, length);
-
-    if (result == 0)
-    {
-        display_book_text(text); 
-
-    } else
-    {
-        printf("can't display book\n");
-    }
-
-    return 0;
-}
-
-void display_book_text (const char *text)
-{
     int len;
     int w;
     int h;
@@ -223,19 +204,37 @@ void display_book_text (const char *text)
     int h2;
    
     getmaxyx(stdscr, h, w);
-    len = strlen(text);
-    w2 = w - 2;
-    h2 = h - 2;
+    w2 = w - 2 - padding_x * 2;
+    h2 = h - 2 - padding_y * 2;
+    page = book_page;
+    length = w2 * h2;
 
-    for (int i = 0; i < h2; i ++)
+    result = get_page(current_book, &text, page, length);
+
+    if (result == 0)
     {
-        for (int j = 0; j < w2; j ++)
+        len = strlen(text);
+    
+        for (int i = 0; i < h2; i ++)
         {
-            mvaddch(1 + i, 1 + j, text[i * h2 + j]);
+            for (int j = 0; j < w2; j ++)
+            {
+                char c = text[i * h2 + j];
+    
+                if (c == '\n')
+                    i ++;
+    
+                mvaddch(1 + i + padding_y, 1 + j + padding_x, c);
+            }
         }
+    
+        refresh();
+    } else
+    {
+        printf("can't display book\n");
     }
 
-    refresh();
+    return 0;
 }
 
 void scroll_up ()
@@ -281,12 +280,16 @@ void scroll_down ()
 
 void page_up ()
 {
-
+    if (state == BOOK)
+    {
+    }
 }
 
 void page_down ()
 {
-
+    if (state == BOOK)
+    {
+    }
 }
 
 void select_title ()
