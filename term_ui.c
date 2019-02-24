@@ -67,7 +67,7 @@ void clear_screen (const char *title_full)
 
     const char version[3] = "0.1";
     char *top = malloc(w * sizeof(char));
-    // 178 = solid block
+    // no border for now
     char border = (char)' ';
 
     // top bar
@@ -210,6 +210,12 @@ int display_book ()
     length = w2 * h2;
 
     text = get_body(current_book) + book_page * 500;
+
+    if (text == NULL)
+    {
+        printf("can't display book\n");
+        return 1;
+    }
 
     int x = 0;
     int y = 0;
