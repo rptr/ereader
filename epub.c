@@ -236,6 +236,7 @@ int html_to_plain (const char *html, char **plain)
     bool rmv = false;
     int j = 0;
 
+    // remove < > tags
     for (int i = 0; i < len; i ++)
     {
         if (html[i] == '<')
@@ -255,25 +256,10 @@ int html_to_plain (const char *html, char **plain)
         }
     }
 
-    *plain = malloc(j * sizeof(char));
-    strncpy(*plain, clean, j);
-//    memcpy(plain, clean, j * sizeof(char));
+    *plain = malloc(len * sizeof(char));
+    strncpy(*plain, clean, len);
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
