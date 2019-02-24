@@ -209,9 +209,8 @@ int add_section (bookid book, char *text)
     return 0;
 }
 
-int get_page (bookid book, char **text, int page, int length)
+int get_page (bookid book, char **text, int offset, int length)
 {
-    int offset;
     int max_len;
     ebook *ebook;
 
@@ -230,7 +229,6 @@ int get_page (bookid book, char **text, int page, int length)
     }
 
     max_len = strlen(ebook->body);
-    offset = (page) * length;
 
     if (offset > max_len)
     {
@@ -248,6 +246,17 @@ int get_page (bookid book, char **text, int page, int length)
 //    strncpy(*text, ebook.body + offset, length);
 
     return 0;
+}
+
+const char *get_body (bookid id)
+{
+    if (id >= num_books)
+    {
+        printf("book.c::get_page(): invalid book %d\n", id);
+        return 2;
+    }
+
+    return books[id].body;
 }
 
 unsigned get_num_books ()

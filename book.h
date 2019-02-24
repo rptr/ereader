@@ -66,11 +66,12 @@ int add_section (bookid book, char *text);
  * page: starts from 1
  * Returns 0 on success.
  */
-int get_page (bookid book, char **text, int page, int length);
+int get_page (bookid book, char **text, int offset, int length);
 
 int set_title (bookid id, const char *text);
 
 const char *get_title (bookid id);
+const char *get_body (bookid id);
 
 unsigned get_num_books ();
 
