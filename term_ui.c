@@ -68,7 +68,7 @@ void clear_screen (const char *title_full)
     const char version[3] = "0.1";
     char *top = malloc(w * sizeof(char));
     // 178 = solid block
-    char border = (char)178;
+    char border = (char)250;
 
     // top bar
     for (int x = 0; x < w; x ++)
@@ -198,12 +198,12 @@ int display_book ()
     int length;
     int result;
     const char *title = get_title(current_book);
-    clear_screen(title);
     int w;
     int h;
     int w2;
     int h2;
    
+    clear_screen(title);
     getmaxyx(stdscr, h, w);
     w2 = w - 2 - padding_x * 2;
     h2 = h - 2 - padding_y * 2;
@@ -254,6 +254,11 @@ int display_book ()
         {
             x = 0;
             y ++;
+        }
+
+        if (y >= h2)
+        {
+            break;
         }
     }
 
