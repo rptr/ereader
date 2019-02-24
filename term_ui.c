@@ -23,6 +23,7 @@ int ui_start ()
     setlocale(LC_ALL, "");
     initscr();
     noecho();
+    curs_set(0);
 
     while (run)
     {
