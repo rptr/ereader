@@ -29,12 +29,15 @@ int load_epub (char *filename, bookid book)
     int error;
     int result;
     char *opf_filename = NULL;
+    // XXX magic number -- what's the MAX_PATH thing?
+    char *directory = NULL;
 
     zip_t *fd = zip_open(filename, ZIP_RDONLY, &error);
 
     if (fd == NULL)
     {
-        printf("could not open epub\n");
+        printf("could not open epub: %s\n", filename);
+        return 1;
 
     } else 
     {
@@ -55,7 +58,36 @@ int load_epub (char *filename, bookid book)
             return 3;
         }
 
-        // get the actual html page file names
+        // get the directory in which the .opf and (presumably) the other files sit 
+        char *parts = strtok(opf_filename, "/");
+        char *next;
+        int i = 0;
+
+        while (parts != NULL)
+        {
+            next = strtok(NULL, "/");
+
+            if (next == NULL) break;
+
+            if (directory == NULL)
+            {
+                directory = malloc(200);
+            }
+
+            strcpy(directory + i, parts);
+            i += strlen(parts) + 1;
+            directory[i - 1] = '/';
+            directory[i] = '\0';
+
+            parts = next;
+        }
+
+        printf("epub: looking for files in %s\n", directory);
+
+        // get the actual html page file names from the content.opf file
+        // 1. find position of ".html"
+        // 2. search back until "\"" is found
+        // 3. try to load xxxx.html
         char *pos;
         int offset = 0;
         int size;
@@ -69,7 +101,6 @@ int load_epub (char *filename, bookid book)
 
                 if (pos == NULL)
                 {
-                    printf("can't find html\n");
                     break;
                 }
 
@@ -77,7 +108,7 @@ int load_epub (char *filename, bookid book)
 
                 int start = 0, len;
 
-                for (; offset > 0; offset --)
+                for (; offset >= 0; offset --)
                 {
                     if (buf[offset] == '"')
                     {
@@ -85,16 +116,18 @@ int load_epub (char *filename, bookid book)
                         // + 4 to account for the fact that we start at the '.'
                         // of ".html"
                         len = pos - buf - start + 5;
+
                         char *file = malloc(len * sizeof(char));;
                         strncpy(file, buf + start, len);
                         file[len] = '\0';
-                        int success = load_file(fd, book, file);
-                        free(file);
+
+                        int success = load_file(fd, book, file, directory);
                         offset = pos - buf + len;
+                        free(file);
 
                         if (success != 0)
                         {
-                            printf("could not load file %s\n", file);
+                            printf("epub: could not load file %.*s.\n", len, buf + start);
                             return 6;
                         }
 
@@ -109,6 +142,8 @@ int load_epub (char *filename, bookid book)
                 }
             }
 
+            offset = 0;
+
             // we save the last little bit of the previous buffer when reading
             // a new chunk (in case there's a file/link in the last bit)
 //            offset = 1024 - offset;
@@ -121,6 +156,12 @@ int load_epub (char *filename, bookid book)
 
     // TEMP
     set_title(book, filename);
+
+    // TODO remove multiple returns so that directory is always freed
+    if (directory != NULL)
+    {
+        free(directory);
+    }
 
     printf("EPUB: successfully loaded file %s\n", filename);
     return 0;
@@ -181,51 +222,69 @@ int find_rootfile (zip_t *zip, char **rootfile)
     return 0;
 }
 
-int load_file (zip_t *zip, bookid book, char *filename)
+int load_file (zip_t *zip, bookid book, char *filename, char *directory)
 {
-    zip_file_t *file = zip_fopen(zip, filename, ZIP_FL_UNCHANGED);
+    char *full_path = filename;
+
+    if (directory != NULL)
+    {
+        int len = strlen(filename) + strlen(directory) + 1;
+        full_path = malloc(len);
+        strcpy(full_path, directory);
+        strcat(full_path, filename);
+        full_path[len - 1] = '\0';
+    }
+
+    zip_file_t *file = zip_fopen(zip, full_path, ZIP_FL_UNCHANGED);
 
     if (file == NULL)
     {
-        printf("epub: can't load file %s\n", filename);
-        return 1;
-    }
+        printf("epub: can't load file %s\n", full_path);
 
-
-    char *section = NULL;
-    char buf[2048];
-    int size, total_size = 0;
-
-    while ((size = zip_fread(file, buf, 2048)) > 0)
+    } else
     {
-        char *temp = malloc((total_size + size + 1) * sizeof(char));
-       
-        if (section != NULL)
+        char *section = NULL;
+        char buf[2048];
+        int size, total_size = 0;
+    
+        while ((size = zip_fread(file, buf, 2048)) > 0)
         {
-            strncpy(temp, section, total_size);
-            free(section);
-        } 
+            char *temp = malloc((total_size + size + 1) * sizeof(char));
+           
+            if (section != NULL)
+            {
+                strncpy(temp, section, total_size);
+                free(section);
+            } 
+    
+            section = temp;
+            strncpy(section + total_size, buf, size);
+            total_size += size;
+        }
+    
+        if (section == NULL)
+        {
+            printf("epub.c::load_file(): no text loaded\n");
 
-        section = temp;
-        strncpy(section + total_size, buf, size);
-        total_size += size;
+        } else
+        {
+            char *plain = NULL;
+        
+            section[total_size] = '\0';
+            html_to_plain(section, &plain);
+            add_section(book, plain);
+        
+            printf("epub: loaded file %s\n", filename);
+        }
+
+        zip_fclose(file);
     }
-
-    if (section == NULL)
+    
+    if (directory != NULL)
     {
-        printf("epub.c::load_file(): no text loaded\n");
-        return 1;
+        free(full_path);
     }
 
-    char *plain = NULL;
-
-    section[total_size] = '\0';
-    html_to_plain(section, &plain);
-    add_section(book, plain);
-
-    printf("epub: loaded file %s\n", filename);
-
-    zip_fclose(file);
     return 0;
 }
 
