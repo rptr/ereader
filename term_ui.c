@@ -194,7 +194,6 @@ int list_titles ()
 int display_book ()
 {
     char *text = NULL;
-    int page;
     int length;
     int result;
     const char *title = get_title(current_book);
@@ -207,65 +206,57 @@ int display_book ()
     getmaxyx(stdscr, h, w);
     w2 = w - 2 - padding_x * 2;
     h2 = h - 2 - padding_y * 2;
-    page = book_page;
     length = w2 * h2;
 
-    result = get_page(current_book, &text, page, length);
+    text = get_body(current_book) + book_page * 500;
 
-    if (result == 0 && text != NULL)
+    int x = 0;
+    int y = 0;
+    int len = h2 * w2;
+
+    for (int i = 0; i < len; i ++)
     {
-        int x = 0;
-        int y = 0;
-        int len = h2 * w2;
+        char c = text[i];
 
-        for (int i = 0; i < len; i ++)
+        if (c == '\n')
         {
-            char c = text[i];
-
-            if (c == '\n')
-            {
-                y ++;
-                x = 0;
-                continue;
-            }
-
-            // ascii
-            if ((unsigned char)c < 128)
-            {
-                mvaddch(1 + padding_y + y, 1 + padding_x + x, c);
-
-            // unicode
-            } else if ((unsigned char)c < 224)
-            {
-                mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 2, text + i);
-                i ++;
-
-            } else if ((unsigned char)c < 240)
-            {
-                mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 3, text + i);
-                i += 2;
- 
-            } else
-            {
-                mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 4, text + i);
-                i += 3;
-            }
-
-            x ++;
-
-            if (x == w2)
-            {
-                x = 0;
-                y ++;
-            }
+            y ++;
+            x = 0;
+            continue;
         }
-    
-        refresh();
 
-    } else
-    {
-        printf("can't display book\n");
+        // ascii
+        if ((unsigned char)c < 128)
+        {
+            mvaddch(1 + padding_y + y, 1 + padding_x + x, c);
+
+        // unicode
+        } else if ((unsigned char)c < 224)
+        {
+            mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 2, text + i);
+            i ++;
+
+        } else if ((unsigned char)c < 240)
+        {
+            mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 3, text + i);
+            i += 2;
+
+        } else
+        {
+            mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 4, text + i);
+            i += 3;
+        }
+
+        x ++;
+
+        if (x == w2)
+        {
+            x = 0;
+            y ++;
+        }
     }
+
+    refresh();
 
     return 0;
 }
