@@ -68,7 +68,7 @@ void clear_screen (const char *title_full)
     const char version[3] = "0.1";
     char *top = malloc(w * sizeof(char));
     // 178 = solid block
-    char border = (char)250;
+    char border = (char)' ';
 
     // top bar
     for (int x = 0; x < w; x ++)
