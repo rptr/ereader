@@ -273,8 +273,6 @@ int load_file (zip_t *zip, bookid book, char *filename, char *directory)
             section[total_size] = '\0';
             html_to_plain(section, &plain);
             add_section(book, plain);
-        
-            printf("epub: loaded file %s\n", filename);
         }
 
         zip_fclose(file);
