@@ -197,13 +197,11 @@ int add_section (bookid book, char *text)
         free(books[book].body);
 
         books[book].body = new;
-        printf("append to book %d body %d\n", book, strlen(books[book].body));
 
     } else
     {
         books[book].body = malloc(strlen(text));
         strcpy(books[book].body, text);
-        printf("new book body %d\n", strlen(text));
     }
 
     return 0;
