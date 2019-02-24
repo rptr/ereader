@@ -4,6 +4,7 @@
 #include <sys/ioctl.h>
 #include <curses.h>
 #include <string.h>
+#include <locale.h>
 
 #include "term_ui.h"
 #include "book.h"
@@ -19,6 +20,7 @@ int ui_start ()
 {
     bool run = true;
 
+    setlocale(LC_ALL, "");
     initscr();
     noecho();
 
@@ -212,20 +214,51 @@ int display_book ()
 
     if (result == 0 && text != NULL)
     {
-        int y;
-        int line = 0;
+        int x = 0;
+        int y = 0;
+        int len = h2 * w2;
 
-        for (int i = 0; i < h2; i ++)
+        for (int i = 0; i < len; i ++)
         {
-            y = line + padding_y + 1;
-            mvprintw(y, padding_x, "%*.*s\n", w2, w2, text + i * w2);
+            char c = text[i];
 
-            if (strstr(text + i * w2, "\n") < text + i * w2 + w2)
-                line ++;
+            if (c == '\n')
+            {
+                y ++;
+                x = 0;
+                continue;
+            }
 
-            line ++;
+            // ascii
+            if ((unsigned char)c < 128)
+            {
+                mvaddch(1 + padding_y + y, 1 + padding_x + x, c);
+
+            // unicode
+            } else if ((unsigned char)c < 224)
+            {
+                mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 2, text + i);
+                i ++;
+
+            } else if ((unsigned char)c < 240)
+            {
+                mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 3, text + i);
+                i += 2;
+ 
+            } else
+            {
+                mvprintw(1 + padding_y + y, 1 + padding_x + x, "%.*s", 4, text + i);
+                i += 3;
+            }
+
+            x ++;
+
+            if (x == w2)
+            {
+                x = 0;
+                y ++;
+            }
         }
-
     
         refresh();
 

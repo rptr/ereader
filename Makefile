@@ -1,6 +1,6 @@
 
 CFLAGS=-Wall -g -ggdb `pkg-config --cflags gtk+-3.0 libzip`
-LIBS=`pkg-config --libs gtk+-3.0 libzip ncurses`
+LIBS=`pkg-config --libs gtk+-3.0 libzip ncursesw`
 
 ereader : main.o book.o epub.o gtk_ui.o term_ui.o settings.o
 	gcc -o ereader main.o book.o epub.o gtk_ui.o term_ui.o settings.o $(LIBS) $(CFLAGS)
