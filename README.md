@@ -4,7 +4,7 @@
 
 dependencies:
 
-`libzip libgtk-3-0`
+`libzip libncursesw5`
 
 to compile, simply run:
 
