@@ -36,7 +36,10 @@ int load_epub (char *filename, bookid book)
 
     if (fd == NULL)
     {
-        printf("could not open epub: %s\n", filename);
+        zip_error_t e_msg;
+        zip_error_init_with_code(&e_msg, error);
+        printf("could not open epub: %s. Error: %s\n", filename, zip_error_strerror(&e_msg));
+        zip_error_fini(&e_msg);
         return 1;
 
     } else 

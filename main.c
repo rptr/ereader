@@ -32,8 +32,14 @@ void find_titles_in_dir (const char *dir_name)
 
     while ((de = readdir(dir)))
     {
-        unsigned tmp;
-        load_book(de->d_name, &tmp);
+        unsigned trash;
+        // XXX find out what the max file path length is
+        char full_path[1000];
+        strncpy(full_path, dir_name, strlen(dir_name));
+        strncpy(full_path + strlen(dir_name), de->d_name, strlen(de->d_name));
+        full_path[strlen(dir_name) + strlen(de->d_name)] = '\0';
+
+        load_book(full_path, &trash);
     }
 
     closedir(dir);
