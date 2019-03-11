@@ -181,6 +181,8 @@ int add_section (bookid book, char *text)
         return 1;
     }
 
+    printf("add section book id: %d\n", book);
+
     if (books[book].body != NULL)
     {
         char *new;
@@ -189,10 +191,10 @@ int add_section (bookid book, char *text)
 
         old_len = strlen(books[book].body);
         new_len = strlen(text);
-        new = malloc(old_len + new_len);
+        new = malloc(old_len + new_len + 1);
         strncpy(new, books[book].body, old_len);
         strncpy(new + old_len, text, new_len);
-        new[new_len + old_len - 1] = '\0';
+        new[new_len + old_len] = '\0';
     
         free(books[book].body);
 
