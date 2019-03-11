@@ -181,7 +181,7 @@ int add_section (bookid book, char *text)
         return 1;
     }
 
-    printf("add section book id: %d\n", book);
+    printf("add section book id: %d. len: %d\n", book, strlen(text));
 
     if (books[book].body != NULL)
     {
