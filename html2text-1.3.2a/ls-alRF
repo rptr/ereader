@@ -1,0 +1,70 @@
+.:
+insgesamt 848
+drwxr-xr-x    3 root     root         4096 Jan 14 15:24 ./
+drwxr-xr-x   90 martin   users      311296 Jan 14 15:20 ../
+-rw-r--r--    1 root     root        27300 Jan 14 15:18 1.3.2a_to_1.3.2.diff
+-rw-r--r--    1 root     root        11165 Nov 23 12:05 Area.C
+-rw-r--r--    1 root     root         5319 Nov 23 12:05 Area.h
+-rw-r--r--    1 root     root        21586 Jan 14 15:08 CHANGES
+-rw-r--r--    1 root     root        17996 Okt  4  2001 COPYING
+-rw-r--r--    1 root     root          953 Nov 23 12:12 CREDITS
+-rw-r--r--    1 root     root        15627 Nov 23 12:05 HTMLControl.C
+-rw-r--r--    1 root     root         2706 Nov 23 12:05 HTMLControl.h
+-rw-r--r--    1 root     root       114483 Nov 23 12:05 HTMLParser.C
+-rw-r--r--    1 root     root        12277 Aug 12  2002 HTMLParser.h
+-rw-r--r--    1 root     root        12277 Aug 12  2002 HTMLParser.k
+-rw-r--r--    1 root     root        26419 Nov 23 12:05 HTMLParser.y
+-rw-r--r--    1 root     root         7878 Aug 31  2002 INSTALL
+-rw-r--r--    1 root     root         1522 Nov 23 12:11 KNOWN_BUGS
+-rw-r--r--    1 root     root         4297 Jan 14 14:47 Makefile.in
+-rw-r--r--    1 root     root         4160 Nov 23 12:05 Properties.C
+-rw-r--r--    1 root     root         2754 Nov 23 12:05 Properties.h
+-rw-r--r--    1 root     root         8208 Jan 14 14:36 README
+-rw-r--r--    1 root     root          871 Jan 14 14:45 RELEASE_NOTES
+-rw-r--r--    1 root     root         2653 Jan 12 14:19 TODO
+-rw-r--r--    1 root     root         3850 Jan 12 14:17 ascii.substitutes
+-rw-r--r--    1 root     root         3259 Okt  4  2001 auto_aptr.h
+-rw-r--r--    1 root     root         2615 Sep 21  1999 cmp_nocase.C
+-rw-r--r--    1 root     root         2807 Okt  4  2001 cmp_nocase.h
+-rwxr-xr-x    1 root     root         6745 Jan 12 16:47 configure*
+-rw-r--r--    1 root     root        44328 Nov 23 12:05 format.C
+-rw-r--r--    1 root     root         2440 Nov 23 12:05 format.h
+-rw-r--r--    1 root     root        16628 Nov 23 12:05 html.C
+-rw-r--r--    1 root     root        19943 Okt  4  2001 html.h
+-rw-r--r--    1 root     root         2587 Jan 14 14:20 html2text.1.gz
+-rw-r--r--    1 root     root        11355 Nov 23 12:05 html2text.C
+-rw-r--r--    1 root     root         2465 Jun 11  2001 html2textrc.5.gz
+drwxr-xr-x    3 root     root         4096 Sep 18  2000 libstd/
+-rw-r--r--    1 root     root            0 Jan 14 15:24 ls-alRF
+-rw-r--r--    1 root     root         1033 Jun  8  2001 pretty.style
+-rw-r--r--    1 root     root        16409 Nov 23 12:09 sgml.C
+-rw-r--r--    1 root     root         2616 Okt 26  1999 sgml.h
+-rw-r--r--    1 root     root        18773 Jul 22  2002 table.C
+-rw-r--r--    1 root     root         9658 Jul 22  2002 urlistream.C
+-rw-r--r--    1 root     root         2827 Nov 23 13:07 urlistream.h
+
+./libstd:
+insgesamt 84
+drwxr-xr-x    3 root     root         4096 Sep 18  2000 ./
+drwxr-xr-x    3 root     root         4096 Jan 14 15:24 ../
+-rw-r--r--    1 root     root         2654 Nov 23  1999 Makefile.in
+drwxr-xr-x    2 root     root         4096 Sep 18  2000 include/
+-rw-r--r--    1 root     root        21494 Nov 17  1999 rb_tree.C
+-rw-r--r--    1 root     root         7550 Nov  9  1999 rb_tree.h
+-rw-r--r--    1 root     root        14405 Okt 27  1999 string.C
+-rw-r--r--    1 root     root        11006 Okt 26  1999 vector_base.C
+-rw-r--r--    1 root     root         5312 Okt 26  1999 vector_base.h
+
+./libstd/include:
+insgesamt 96
+drwxr-xr-x    2 root     root         4096 Sep 18  2000 ./
+drwxr-xr-x    3 root     root         4096 Sep 18  2000 ../
+-rw-r--r--    1 root     root         3384 Okt  4  2001 auto_ptr.h
+-rw-r--r--    1 root     root        10918 Okt 26  1999 list
+-rw-r--r--    1 root     root        18237 Nov  9  1999 map
+-rw-r--r--    1 root     root         2412 Mär  8  1999 memory
+-rw-r--r--    1 root     root         2544 Okt 26  1999 new
+-rw-r--r--    1 root     root        16098 Okt 26  1999 set
+-rw-r--r--    1 root     root         9676 Okt 27  1999 string
+-rw-r--r--    1 root     root         2651 Mär  8  1999 utility
+-rw-r--r--    1 root     root         9818 Nov  9  1999 vector

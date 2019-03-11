@@ -345,7 +345,6 @@ change_selection (int amount)
     {
         selection = 0;
     }
-
 }
 
 void select_title ()

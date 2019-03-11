@@ -1,0 +1,769 @@
+diff -r -u -bB html2text-1.3.2a/Area.C html2text-1.3.2/Area.C
+--- html2text-1.3.2a/Area.C	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/Area.C	Tue Nov  2 18:57:49 1999
+@@ -1,39 +1,48 @@
+ 
+- /***************************************************************************/
++/* ------------------------------------------------------------------------- */
+ 
+ /*
+- * Portions Copyright (c) 1999 GMRS Software GmbH
+- * Carl-von-Linde-Str. 38, D-85716 Unterschleissheim, http://www.gmrs.de
++ * Copyright (c) 1999
++ *      GMRS Software GmbH, Innsbrucker Ring 159, 81669 Munich, Germany.
++ *      http://www.gmrs.de
+  *      All rights reserved.
++ *      Author: Arno Unkrig (arno.unkrig@gmrs.de)
+  *
+- * Author: Arno Unkrig <arno@unkrig.de>
+- */
+- 
+-/* This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *      This product includes software developed by GMRS Software GmbH.
++ * 4. The name of GMRS Software GmbH may not be used to endorse or promote
++ *    products derived from this software without specific prior written
++ *    permission.
+  *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+- * GNU General Public License in the file COPYING for more details.
+- */
+-
+- /***************************************************************************/
+-
+-/*
+- * Changes to version 1.2.2 were made by Martin Bayer <mbayer@zedat.fu-berlin.de>
+- * Dates and reasons of modifications:
+- * Wed Jul  2 21:56:45 CEST 2003: ported to g++ 3.3
++ * THIS SOFTWARE IS PROVIDED BY GMRS SOFTWARE GMBH ``AS IS'' AND ANY
++ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL GMRS SOFTWARE GMBH BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
++ * THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+- /***************************************************************************/
++/* ------------------------------------------------------------------------- */
+ 
++#ident "$Id: Area.C,v 1.7 1999/11/02 17:57:49 arno Exp $"
+ 
+ #include <stdlib.h>
+ #include <string.h>
+-#include <iostream>
++#include <iostream.h>
+ 
+ #include "Area.h"
+ #include "string.h"
+@@ -468,7 +477,7 @@
+ 	}
+       }
+     }
+-    os << std::endl;
++    os << endl;
+   }
+ 
+   return os;
+diff -r -u -bB html2text-1.3.2a/Area.h html2text-1.3.2/Area.h
+--- html2text-1.3.2a/Area.h	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/Area.h	Thu Oct  4 22:18:09 2001
+@@ -7,6 +7,13 @@
+  * All rights reserved.
+  *
+  * Author: Arno Unkrig <arno@unkrig.de>
++ *
++ * All advertising materials mentioning features or use of this software
++ * must display the following acknowledgement:
++ * "This product includes software developed by GMRS Software GmbH."
++ * The name of GMRS Software GmbH may not be used to endorse or promote
++ * products derived from this software without specific prior written
++ * permission.
+  */
+  
+ /* This program is free software; you can redistribute it and/or modify
+@@ -26,7 +33,6 @@
+  * Changes to version 1.2.2 were made by Martin Bayer <mbayer@zedat.fu-berlin.de>
+  * Dates and reasons of modifications:
+  * Thu Oct  4 21:21:10 CEST 2001: ported to g++ 3.0
+- * Wed Jul  2 21:59:41 CEST 2003: ported to g++ 3.3
+  */
+   
+  /***************************************************************************/
+@@ -40,7 +46,7 @@
+ 
+ #include <sys/types.h>
+ #include <string>
+-#include <istream>
++#include <istream.h>
+ 
+ #ifdef BOOL_DEFINITION
+ BOOL_DEFINITION
+diff -r -u -bB html2text-1.3.2a/CREDITS html2text-1.3.2/CREDITS
+--- html2text-1.3.2a/CREDITS	Sun Nov 23 12:12:26 2003
++++ html2text-1.3.2/CREDITS	Mon Jan 12 12:52:49 2004
+@@ -1,4 +1,4 @@
+-## CREDITS - Thanks to...                         Sun Nov 23 12:12:18 CET 2003
++## CREDITS - Thanks to...                         Thu Nov 20 18:53:07 CET 2003
+ ## ===========================================================================
+ #
+ # Since september 2000, these people have contributed to the development of
+@@ -19,9 +19,6 @@
+ 
+ Kirby Zhou <kirbyzhou@263.net>
+         + patch for SCRIPT/STYLE elements within table cells
+-
+-Nicolas Boullis <nboullis@debian.org>
+-	+ ported to g++-3.3 (this change is not backward-compatible)
+ 
+ Alexander Solovey <alsol@sumdu.edu.ua>
+ 	+ bugfix for urlistream.h
+diff -r -u -bB html2text-1.3.2a/HTMLControl.C html2text-1.3.2/HTMLControl.C
+--- html2text-1.3.2a/HTMLControl.C	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/HTMLControl.C	Mon Jan 12 12:52:49 2004
+@@ -27,14 +27,13 @@
+  * Dates and reasons of modifications:
+  * Fre Jun  8 17:20:38 CEST 2001: fixed coredump
+  * Sun Apr  7 11:31:10 CEST 2002: fixed parser errors
+- * Wed Jul  2 22:00:21 CEST 2003: ported to g++ 3.3
+  * Sun Nov 16 22:13:50 CET 2003: better rendering of XHTML
+  */
+   
+  /***************************************************************************/
+ 
+ 
+-#include <iostream>
++#include <iostream.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <ctype.h>
+@@ -437,15 +436,15 @@
+         }
+ 
+         if (debug_scanner) {
+-          std::cerr << "Scanned tag \"<" << (is_end_tag ? "/" : "") << tag_name;
++          cerr << "Scanned tag \"<" << (is_end_tag ? "/" : "") << tag_name;
+           if (!is_end_tag && tag_attributes.get()) {
+ 	    const list<TagAttribute>           &ta(*tag_attributes);
+             list<TagAttribute>::const_iterator j;
+             for (j = ta.begin(); j != ta.end(); ++j) {
+-	      std::cerr << " " << (*j).first << "=\"" << (*j).second << "\"";
++	      cerr << " " << (*j).first << "=\"" << (*j).second << "\"";
+             }
+           }
+-          std::cerr << ">\"" << std::endl;
++          cerr << ">\"" << endl;
+         }
+ 
+         /*
+@@ -459,7 +458,7 @@
+         );
+         if (tag == NULL) { /* EXTENSION: Swallow unknown tags. */
+           if (debug_scanner) {
+-            std::cerr << "Tag unknown -- swallowed." << std::endl;
++            cerr << "Tag unknown -- swallowed." << endl;
+           }
+           continue;
+         }
+@@ -470,7 +469,7 @@
+         if (is_end_tag) {
+           if (!tag->end_tag_code) {
+             if (debug_scanner) {
+-              std::cerr << "Non-container end tag scanned." << std::endl;
++              cerr << "Non-container end tag scanned." << endl;
+             }
+             continue;
+           }
+@@ -520,7 +519,7 @@
+        */
+       if (s->empty()) { delete s; continue; }
+ 
+-      if (debug_scanner) std::cerr << "Scanned PCDATA \"" << *s << "\"" << std::endl;
++      if (debug_scanner) cerr << "Scanned PCDATA \"" << *s << "\"" << endl;
+ 
+       return PCDATA;
+     }
+diff -r -u -bB html2text-1.3.2a/HTMLControl.h html2text-1.3.2/HTMLControl.h
+--- html2text-1.3.2a/HTMLControl.h	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/HTMLControl.h	Thu Oct  4 22:06:54 2001
+@@ -7,6 +7,13 @@
+  * All rights reserved.
+  *
+  * Author: Arno Unkrig <arno@unkrig.de>
++ *
++ * All advertising materials mentioning features or use of this software
++ * must display the following acknowledgement:
++ * "This product includes software developed by GMRS Software GmbH."
++ * The name of GMRS Software GmbH may not be used to endorse or promote
++ * products derived from this software without specific prior written
++ * permission.
+  */
+  
+ /* This program is free software; you can redistribute it and/or modify
+@@ -26,7 +33,6 @@
+  * Changes to version 1.2.2 were made by Martin Bayer <mbayer@zedat.fu-berlin.de>
+  * Dates and reasons of modifications:
+  * Thu Oct  4 21:25:07 CEST 2001: ported to g++ 3.0
+- * Wed Jul  2 22:01:12 CEST 2003: ported to g++ 3.3
+  */
+   
+  /***************************************************************************/
+@@ -39,7 +45,7 @@
+ 
+ #include "HTMLParser.h"
+ #include "urlistream.h"
+-#include <istream>
++#include <istream.h>
+ 
+ using std::istream;
+ 
+diff -r -u -bB html2text-1.3.2a/Makefile.in html2text-1.3.2/Makefile.in
+--- html2text-1.3.2a/Makefile.in	Wed Jan 14 14:47:02 2004
++++ html2text-1.3.2/Makefile.in	Wed Jan 14 14:46:40 2004
+@@ -23,7 +23,7 @@
+ #
+ # -----------------------------------------------------------------------------
+ 
+-VERSION=1.3.2a
++VERSION=1.3.2
+ 
+ BISONXX  = bison++
+ YFLAGS   =
+diff -r -u -bB html2text-1.3.2a/Properties.C html2text-1.3.2/Properties.C
+--- html2text-1.3.2a/Properties.C	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/Properties.C	Fri Jun  8 17:51:09 2001
+@@ -7,33 +7,52 @@
+  * All rights reserved.
+  *
+  * Author: Arno Unkrig <arno@unkrig.de>
+- */
+- 
+-/* This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+  *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+- * GNU General Public License in the file COPYING for more details.
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *    This product includes software developed by GMRS Software GmbH.
++ * 4. The name of GMRS Software GmbH may not be used to endorse or promote
++ *    products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY GMRS SOFTWARE GMBH ``AS IS'' AND ANY
++ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GMRS SOFTWARE GMBH BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
++ * THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+  /***************************************************************************/
+  
+ /*
+  * Changes to version 1.2.2 were made by Martin Bayer <mbayer@zedat.fu-berlin.de>
+- * Dates and reasons of modifications:
+- * Fre Jun  8 17:24:35 CEST 2001: new method
+- * Wed Jul  2 22:02:51 CEST 2003: ported to g++ 3.3
++ * Date and reason of last modification: Fre Jun  8 17:24:35 CEST 2001 - new method
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the file
++ * COPYING for more details.
+  */
+ 
+  /***************************************************************************/
+ 
+ 
+ #include <ctype.h>
+-#include <iostream>
++#include <iostream.h>
+ 
+ #include "Properties.h"
+ 
+diff -r -u -bB html2text-1.3.2a/Properties.h html2text-1.3.2/Properties.h
+--- html2text-1.3.2a/Properties.h	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/Properties.h	Thu Oct  4 22:39:10 2001
+@@ -7,6 +7,13 @@
+  * All rights reserved.
+  *
+  * Author: Arno Unkrig <arno@unkrig.de>
++ *
++ * All advertising materials mentioning features or use of this software
++ * must display the following acknowledgement:
++ * "This product includes software developed by GMRS Software GmbH."
++ * The name of GMRS Software GmbH may not be used to endorse or promote
++ * products derived from this software without specific prior written
++ * permission.
+  */
+  
+ /* This program is free software; you can redistribute it and/or modify
+@@ -27,7 +34,6 @@
+  * Dates and reasons of modifications:
+  * Fre Jun  8 17:29:50 CEST 2001
+  * Thu Oct  4 22:38:59 CEST 2001: ported to g++ 3.0
+- * Wed Jul  2 22:03:29 CEST 2003: ported to g++ 3.3
+  */
+   
+  /***************************************************************************/
+@@ -45,7 +51,7 @@
+ 
+ #include <string>
+ #include <map>
+-#include <istream>
++#include <istream.h>
+ 
+ using std::string;
+ using std::map;
+diff -r -u -bB html2text-1.3.2a/configure html2text-1.3.2/configure
+--- html2text-1.3.2a/configure	Mon Jan 12 16:47:18 2004
++++ html2text-1.3.2/configure	Mon Jan 12 16:47:15 2004
+@@ -16,7 +16,6 @@
+ # Fre Jun  8 18:46:58 CEST 2001
+ # Thu Oct  4 21:54:50 CEST 2001
+ # Sun Apr  7 12:04:48 CEST 2002
+-# Tue Nov 11 21:30:26 CET 2003
+ 
+ 
+ echo='/bin/echo -e'
+@@ -32,9 +31,9 @@
+ 
+ $echo 'Checking C++ compiler... \c';
+ cat <<EOF >$tmp_file.C;
+-#include <iostream>
++#include <iostream.h>
+ int main(int, char **) {
+-  std::cout << "hello" << std::endl;
++  cout << "hello" << endl;
+   return 0;
+ }
+ EOF
+@@ -255,7 +254,7 @@
+ #
+ MAKEDEPEND_INCLUDES="";
+ $echo 'Checking "makedepend" includes... \c';
+-echo "#include <iostream>" >$tmp_file.C;
++echo "#include <iostream.h>" >$tmp_file.C;
+ MAKEDEPEND_INCLUDES=`$CXX -E $tmp_file.C 2>/dev/null |
+ sed -n \
+   -e 's/^#line .*"\(\/.*\)\/.*".*/-I\1/p' \
+diff -r -u -bB html2text-1.3.2a/format.C html2text-1.3.2/format.C
+--- html2text-1.3.2a/format.C	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/format.C	Mon Jul 29 13:12:13 2002
+@@ -29,13 +29,12 @@
+  * Fre Jun  8 17:37:12 CEST 2001: new image handling
+  * Thu Oct  4 21:34:26 CEST 2001: ported to g++ 3.0
+  * Mon Jul 29 13:09:26 CEST 2002: fixed runtime increment
+- * Wed Jul  2 22:04:08 CEST 2003: ported to g++ 3.3
+  */
+   
+  /***************************************************************************/
+ 
+ 
+-#include <sstream>
++#include <strstream.h>
+ 
+ #include <stdlib.h>
+ #include <ctype.h>
+@@ -375,10 +374,10 @@
+   case CUSTOM3:   bullet = custom3_bullet; break;
+   case ARABIC_NUMBERS:
+     {
+-      std::ostringstream oss;
+-      oss << number << '.'; // << std::ends;
++      ostrstream oss;
++      oss << number << '.' << std::ends;
+       bullet = oss.str();
+-      // oss.rdbuf()->freeze(0);
++      oss.rdbuf()->freeze(0);
+     }
+     break;
+   case LOWER_ALPHA:
+diff -r -u -bB html2text-1.3.2a/format.h html2text-1.3.2/format.h
+--- html2text-1.3.2a/format.h	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/format.h	Thu Oct  4 22:04:15 2001
+@@ -7,6 +7,13 @@
+  * All rights reserved.
+  *
+  * Author: Arno Unkrig <arno@unkrig.de>
++ *
++ * All advertising materials mentioning features or use of this software
++ * must display the following acknowledgement:
++ * "This product includes software developed by GMRS Software GmbH."
++ * The name of GMRS Software GmbH may not be used to endorse or promote
++ * products derived from this software without specific prior written
++ * permission.
+  */
+  
+ /* This program is free software; you can redistribute it and/or modify
+@@ -27,7 +34,6 @@
+  * Dates and reasons of modifications:
+  * Fre Jun  8 17:49:39 CEST 2001: new method
+  * Thu Oct  4 21:36:51 CEST 2001: ported to g++ 3.0
+- * Wed Jul  2 22:05:32 CEST 2003: ported to g++ 3.3
+  */
+   
+  /***************************************************************************/
+@@ -40,7 +46,7 @@
+ 
+ #include <string>
+ #include <vector>
+-#include <istream>
++#include <istream.h>
+ 
+ using std::string;
+ using std::vector;
+diff -r -u -bB html2text-1.3.2a/html.C html2text-1.3.2/html.C
+--- html2text-1.3.2a/html.C	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/html.C	Fri Jun  8 17:43:53 2001
+@@ -7,26 +7,45 @@
+  * All rights reserved.
+  *
+  * Author: Arno Unkrig <arno@unkrig.de>
+- */
+- 
+-/* This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+  *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+- * GNU General Public License in the file COPYING for more details.
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *    This product includes software developed by GMRS Software GmbH.
++ * 4. The name of GMRS Software GmbH may not be used to endorse or promote
++ *    products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY GMRS SOFTWARE GMBH ``AS IS'' AND ANY
++ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GMRS SOFTWARE GMBH BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
++ * THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+  /***************************************************************************/
+  
+ /*
+  * Changes to version 1.2.2 were made by Martin Bayer <mbayer@zedat.fu-berlin.de>
+- * Dates and reasons of modifications:
+- * Fre Jun  8 17:43:02 CEST 2001: new method
+- * Wed Jul  2 22:07:12 CEST 2003: ported to g++ 3.3
++ * Date and reason of last modification: Fre Jun  8 17:43:02 CEST 2001 - new method
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the file
++ * COPYING for more details.
+  */
+ 
+  /***************************************************************************/
+@@ -34,7 +53,7 @@
+ 
+ #include <stdlib.h>
+ #include <stdarg.h>
+-#include <iostream>
++#include <iostream.h>
+ 
+ #include "html.h"
+ #include "HTMLParser.h"
+@@ -126,13 +145,13 @@
+     os << "</TITLE>" << separator;
+   }
+   if (isindex_attributes.get()) {
+-    os << "<ISINDEX"<< isindex_attributes << ">" << std::endl;
++    os << "<ISINDEX"<< isindex_attributes << ">" << endl;
+   }
+-  if (base_attributes.get()) os << "<BASE" << base_attributes << ">" << std::endl;
++  if (base_attributes.get()) os << "<BASE" << base_attributes << ">" << endl;
+   foreach(scripts, os, separator);
+   foreach(styles, os, separator);
+-  if (meta_attributes.get()) os << "<META" << meta_attributes << ">" << std::endl;
+-  if (link_attributes.get()) os << "<LINK" << link_attributes << ">" << std::endl;
++  if (meta_attributes.get()) os << "<META" << meta_attributes << ">" << endl;
++  if (link_attributes.get()) os << "<LINK" << link_attributes << ">" << endl;
+   os << "</HEAD>" << separator;
+ }
+ 
+@@ -287,7 +306,7 @@
+ {
+   os << "<OPTION" << attributes << ">" << separator;
+   if (pcdata.get()) pcdata->unparse(os, separator);
+-  os << "</OPTION>" << std::endl;
++  os << "</OPTION>" << endl;
+ }
+ 
+ void
+@@ -295,7 +314,7 @@
+ {
+   os << "<SELECT" << attributes << ">" << separator;
+   if (content.get()) foreach(*content, os, separator);
+-  os << "</SELECT>" << std::endl;
++  os << "</SELECT>" << endl;
+ }
+ 
+ void
+@@ -303,7 +322,7 @@
+ {
+   os << "<TEXTAREA" << attributes << ">" << separator;
+   if (pcdata.get()) pcdata->unparse(os, separator);
+-  os << "</TEXTAREA>" << std::endl;
++  os << "</TEXTAREA>" << endl;
+ }
+ 
+ /* ------------------------------------------------------------------------- */
+diff -r -u -bB html2text-1.3.2a/html2text.C html2text-1.3.2/html2text.C
+--- html2text-1.3.2a/html2text.C	Sun Nov 23 12:05:29 2003
++++ html2text-1.3.2/html2text.C	Mon Jan 12 12:52:49 2004
+@@ -29,13 +29,12 @@
+  * Thu Oct  4 21:42:24 CEST 2001: ported to g++ 3.0, bugfix for '-' as synonym for STDIN
+  * Mon Jul 22 13:48:26 CEST 2002: Made finaly reading from STDIN work.
+  * Sat Sep 14 15:04:09 CEST 2002: Added plain ASCII output patch by Bela Lubkin
+- * Wed Jul  2 22:08:45 CEST 2003: ported to g++ 3.3
+  */
+   
+  /***************************************************************************/
+ 
+ 
+-#include <iostream>
++#include <iostream.h>
+ #include <string.h>
+ #include <stdlib.h>
+ 
+@@ -89,7 +88,7 @@
+    */
+   if (mode != SYNTAX_CHECK && !strcmp(p, "parse error")) return;
+ 
+-  std::cerr
++  cerr
+     << "File \""
+     << file_name
+     << "\", line "
+@@ -98,7 +97,7 @@
+     << current_column
+     << ": "
+     << p
+-    << std::endl;
++    << endl;
+ }
+ 
+ /*virtual*/ void
+@@ -111,14 +110,14 @@
+     break;
+ 
+   case UNPARSE:
+-    document.unparse(os, std::endl);
++    document.unparse(os, endl);
+     break;
+ 
+   case SYNTAX_CHECK:
+     break;
+ 
+   default:
+-    std::cerr << "??? Invalid mode " << mode << " ??? " << std::endl;
++    cerr << "??? Invalid mode " << mode << " ??? " << endl;
+     exit(1);
+     break;
+   }
+@@ -156,23 +155,23 @@
+ main(int argc, char **argv)
+ {
+   if (argc == 2 && !strcmp(argv[1], "-help")) {
+-    std::cout
+-      << "This is html2text, version " stringify(VERSION) << std::endl
+-      << std::endl
++    cout
++      << "This is html2text, version " stringify(VERSION) << endl
++      << endl
+       << usage;
+     exit(0);
+   }
+ 
+   if (argc == 2 && !strcmp(argv[1], "-version")) {
+-    std::cout
+-      << "This is html2text, version " stringify(VERSION) << std::endl
+-      << std::endl
+-      << "The latest version can be found at http://userpage.fu-berlin.de/~mbayer/tools/" << std::endl
+-      << std::endl
+-      << "This program is distributed in the hope that it will be useful, but WITHOUT" << std::endl
+-      << "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS" << std::endl
+-      << "FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details." << std::endl
+-      << std::endl;
++    cout
++      << "This is html2text, version " stringify(VERSION) << endl
++      << endl
++      << "The latest version can be found at http://userpage.fu-berlin.de/~mbayer/tools/" << endl
++      << endl
++      << "This program is distributed in the hope that it will be useful, but WITHOUT" << endl
++      << "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS" << endl
++      << "FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details." << endl
++      << endl;
+     exit(0);
+   }
+ 
+@@ -201,20 +200,20 @@
+     if (!strcmp(arg, "-nobs"         )) { use_backspaces = false;        } else
+     if (!strcmp(arg, "-ascii"        )) { use_iso8859 = false;           } else
+     {
+-      std::cerr
++      cerr
+ 	<< "Unrecognized command line option \""
+ 	<< arg
+ 	<< "\", try \"-help\"."
+-	<< std::endl;
++	<< endl;
+       exit(1);
+     }
+   }
+   if (i > argc) {
+-    std::cerr
++    cerr
+       << "Error: Required parameter after \""
+       << argv[argc - 1]
+       << "\" missing."
+-      << std::endl;
++      << endl;
+     exit(1);
+   }
+ 
+@@ -305,16 +304,16 @@
+       Formatting::setProperty(p->key, p->value);
+     }
+   } else {
+-    std::cerr
++    cerr
+       << "Unknown style \""
+       << style
+       << "\" specified -- try \"-help\"."
+-      << std::endl;
++      << endl;
+     ::exit(1);
+   }
+ 
+   {
+-    std::ifstream ifs(rcfile.c_str());
++    ifstream ifs(rcfile.c_str());
+     if (!ifs.rdbuf()->is_open()) ifs.open("/etc/html2textrc");
+     if (ifs.rdbuf()->is_open()) {
+       Formatting::loadProperties(ifs);
+@@ -327,18 +326,18 @@
+   Area::use_backspaces = use_backspaces;
+ 
+   ostream  *osp;
+-  std::ofstream ofs;
++  ofstream ofs;
+ 
+   if (!strcmp(output_file_name, "-")) {
+-    osp = &std::cout;
++    osp = &cout;
+   } else {
+-    ofs.open(output_file_name, std::ios::out);
++    ofs.open(output_file_name, ios::out);
+     if (!ofs) {
+-      std::cerr
++      cerr
+         << "Could not open output file \""
+         << output_file_name
+         << "\"."
+-        << std::endl;
++        << endl;
+     exit(1);
+     }
+     osp = &ofs;
+@@ -348,7 +347,7 @@
+     const char *input_url = input_urls[i];
+ 
+     if (number_of_input_urls != 1) {
+-      *osp << "###### " << input_url << " ######" << std::endl;
++      *osp << "###### " << input_url << " ######" << endl;
+     }
+ 
+     istream    *isp;
+@@ -356,12 +355,12 @@
+ 
+     uis.open(input_url);
+     if (!uis.is_open()) {
+-      std::cerr
++      cerr
+         << "Opening input URL \""
+ 	<< input_url
+         << "\": "
+         << uis.open_error()
+-        << std::endl;
++        << endl;
+       exit(1);
+     }
+ 
+diff -r -u -bB html2text-1.3.2a/urlistream.h html2text-1.3.2/urlistream.h
+--- html2text-1.3.2a/urlistream.h	Sun Nov 23 13:07:05 2003
++++ html2text-1.3.2/urlistream.h	Mon Jan 12 13:16:32 2004
+@@ -27,7 +27,6 @@
+  * Dates and reasons of modifications:
+  * Thu Oct  4 21:50:51 CEST 2001: ported to g++ 3.0
+  * Sun Apr  7 12:00:50 CEST 2002: Handle URLs with missing node
+- * Wed Jul  2 22:08:05 CEST 2003: ported to g++ 3.3
+  * Tue Nov 11 21:11:51 CET 2003: fd_ might be uninitialized
+  */
+   
+@@ -39,7 +38,7 @@
+ 
+ /* ------------------------------------------------------------------------- */
+ 
+-#include <fstream>
++#include <fstream.h>
+ #include <string>
+ #include <unistd.h>
+ 
