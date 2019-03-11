@@ -155,7 +155,7 @@ int set_title (bookid id, const char *text)
         return 1;
     }
 
-    printf("set_title: %d %s\n", id, text);
+    dbgprintf("set_title: %d %s\n", id, text);
     books[id].title = malloc(strlen(text) * sizeof(char));
     strcpy(books[id].title, text);
     return 0;

@@ -1,5 +1,6 @@
 #include "book.h"
 #include "epub.h"
+#include "settings.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -38,7 +39,7 @@ int load_epub (char *filename, bookid book)
     {
         zip_error_t e_msg;
         zip_error_init_with_code(&e_msg, error);
-        printf("could not open epub: %s. Error: %s\n", filename, zip_error_strerror(&e_msg));
+        dbgprintf("could not open epub: %s. Error: %s\n", filename, zip_error_strerror(&e_msg));
         zip_error_fini(&e_msg);
         return 1;
 
@@ -48,7 +49,7 @@ int load_epub (char *filename, bookid book)
 
         if (opf_filename == NULL || result != 0)
         {
-            printf("can't find .opf file\n");
+            dbgprintf("can't find .opf file\n");
             return 2;
         }
 
@@ -57,7 +58,7 @@ int load_epub (char *filename, bookid book)
 
         if (opf_file == NULL)
         {
-            printf("can't open .opf file %s\n", opf_filename);
+            dbgprintf("can't open .opf file %s\n", opf_filename);
             return 3;
         }
 
@@ -130,7 +131,7 @@ int load_epub (char *filename, bookid book)
 
                         if (success != 0)
                         {
-                            printf("epub: could not load file %.*s.\n", len, buf + start);
+                            dbgprintf("epub: could not load file %.*s.\n", len, buf + start);
                             return 6;
                         }
 
@@ -157,7 +158,7 @@ int load_epub (char *filename, bookid book)
 
         if ((err = zip_fclose(opf_file)))
         {
-            printf("zip_fclose error: %d\n", err);
+            dbgprintf("zip_fclose error: %d\n", err);
         }
 
         zip_discard(fd);    
@@ -172,7 +173,7 @@ int load_epub (char *filename, bookid book)
         free(directory);
     }
 
-    printf("EPUB: successfully loaded file %s\n", filename);
+    dbgprintf("EPUB: successfully loaded file %s\n", filename);
     return 0;
 }
 
@@ -185,7 +186,7 @@ int find_rootfile (zip_t *zip, char **rootfile)
 
     if (root_file == NULL)
     {
-        printf("can't load epub: no container.xml\n");
+        dbgprintf("can't load epub: no container.xml\n");
         return 1;
     }
 
@@ -201,7 +202,7 @@ int find_rootfile (zip_t *zip, char **rootfile)
         if (pos == NULL)
         {
             // no rootfile path
-            printf("bad container.xml\n");
+            dbgprintf("bad container.xml\n");
             return 4;
         }
 
@@ -225,7 +226,7 @@ int find_rootfile (zip_t *zip, char **rootfile)
 
         if (path_len == 0)
         {
-            printf("bad container.xml\n");
+            dbgprintf("bad container.xml\n");
             return 5;
         }
     }
@@ -255,7 +256,7 @@ int load_file (zip_t *zip, bookid book, char *filename, char *directory)
 
     if (file == NULL)
     {
-        printf("epub: can't load file %s\n", full_path);
+        dbgprintf("epub: can't load file %s\n", full_path);
 
     } else
     {
@@ -280,7 +281,7 @@ int load_file (zip_t *zip, bookid book, char *filename, char *directory)
     
         if (section == NULL)
         {
-            printf("epub.c::load_file(): no text loaded\n");
+            dbgprintf("epub.c::load_file(): no text loaded\n");
 
         } else
         {
