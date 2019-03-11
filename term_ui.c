@@ -156,7 +156,7 @@ int list_titles ()
 
     getmaxyx(stdscr, h, w);
 
-    for (int i = 0; i < num_books; i ++)
+    for (int i = 0; i < num_books && i < h - padding_y * 2; i ++)
     {
         const char *title = book_title(i);
 
