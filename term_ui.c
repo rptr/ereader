@@ -123,11 +123,11 @@ int input (char i)
             break;
 
         // page up
-        case 'J':
+        case 'K':
             page_up();
             break;
         // page down
-        case 'K':
+        case 'J':
             page_down();
             break;
 
@@ -152,13 +152,16 @@ int list_titles ()
     clear_screen("Library");
 
     int num_books = get_num_books();
-    int w, h;
+    int w, h, max_lines, page_offset;
 
     getmaxyx(stdscr, h, w);
+    max_lines = h - padding_y * 2;
+    page_offset = selection / max_lines;
 
-    for (int i = 0; i < num_books && i < h - padding_y * 2; i ++)
+    for (int i = 0; i < num_books && i < max_lines; i ++)
     {
-        const char *title = book_title(i);
+        int book_id = i + page_offset * max_lines;
+        const char *title = book_title(book_id);
 
         if (NULL == title)
         {
@@ -167,7 +170,7 @@ int list_titles ()
 
         char selected = ' ';
 
-        if (selection == i)
+        if (selection == book_id)
         {
             selected = 'X';
         }
@@ -176,7 +179,7 @@ int list_titles ()
         char *title_trunc = malloc(max * sizeof(char));
         strncpy(title_trunc, title, max);
         title_trunc[max - 1] = '\0';
-        mvprintw(i + 1, 1, "%c %d: %s", selected, i + 1, title_trunc);
+        mvprintw(i + 1, 1, "%c %d: %s", selected, book_id + 1, title_trunc);
         free(title_trunc);
     }
 
@@ -277,12 +280,7 @@ void scroll_up ()
 {
     if (state == LIBRARY)
     {
-        selection --;
-
-        if (selection < 0)
-        {
-            selection = get_num_books() - 1;
-        }
+        change_selection(-1);
     }
 
     if (state == BOOK)
@@ -300,12 +298,7 @@ void scroll_down ()
 {
     if (state == LIBRARY)
     {
-        selection ++;
-
-        if (selection >= get_num_books())
-        {
-            selection = 0;
-        }
+        change_selection(1);
     }
 
     if (state == BOOK)
@@ -318,7 +311,11 @@ void page_up ()
 {
     if (state == BOOK)
     {
-        selection -= 10;
+    }
+
+    if (state == LIBRARY)
+    {
+        change_selection(-10);
     }
 }
 
@@ -326,9 +323,29 @@ void page_down ()
 {
     if (state == BOOK)
     {
-        selection += 10;
     }
+
+    if (state == LIBRARY)
+    {
+        change_selection(10);
     }
+}
+
+void
+change_selection (int amount)
+{
+    selection += amount;
+
+    if (selection < 0)
+    {
+        selection = get_num_books() - 1;
+    }
+
+    if (selection >= get_num_books())
+    {
+        selection = 0;
+    }
+
 }
 
 void select_title ()
