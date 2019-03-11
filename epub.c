@@ -32,7 +32,7 @@ int load_epub (char *filename, bookid book)
     // XXX magic number -- what's the MAX_PATH thing?
     char *directory = NULL;
 
-    zip_t *fd = zip_open(filename, ZIP_RDONLY, &error);
+    struct zip_t *fd = zip_open(filename, ZIP_RDONLY | ZIP_CHECKCONS, &error);
 
     if (fd == NULL)
     {
@@ -120,7 +120,7 @@ int load_epub (char *filename, bookid book)
                         // of ".html"
                         len = pos - buf - start + 5;
 
-                        char *file = malloc(len * sizeof(char));;
+                        char *file = malloc(len * sizeof(char) + 1);
                         strncpy(file, buf + start, len);
                         file[len] = '\0';
 
@@ -153,8 +153,14 @@ int load_epub (char *filename, bookid book)
 //            strncpy(buf, buf, offset);
         }
 
-        zip_fclose(opf_file);
-        zip_close(fd);    
+        int err;
+
+        if ((err = zip_fclose(opf_file)))
+        {
+            printf("zip_fclose error: %d\n", err);
+        }
+
+        zip_discard(fd);    
     }
 
     // TEMP
@@ -172,7 +178,10 @@ int load_epub (char *filename, bookid book)
 
 int find_rootfile (zip_t *zip, char **rootfile)
 {
-    zip_file_t *root_file = zip_fopen(zip, "META-INF/container.xml", ZIP_FL_UNCHANGED);
+    zip_file_t *root_file = 
+        zip_fopen(zip, 
+                "META-INF/container.xml", 
+                ZIP_FL_UNCHANGED);
 
     if (root_file == NULL)
     {
@@ -227,7 +236,7 @@ int find_rootfile (zip_t *zip, char **rootfile)
 
 int load_file (zip_t *zip, bookid book, char *filename, char *directory)
 {
-    char *full_path = filename;
+    char *full_path;
 
     if (directory != NULL)
     {
@@ -236,6 +245,10 @@ int load_file (zip_t *zip, bookid book, char *filename, char *directory)
         strcpy(full_path, directory);
         strcat(full_path, filename);
         full_path[len - 1] = '\0';
+
+    } else
+    {
+        full_path = filename;
     }
 
     zip_file_t *file = zip_fopen(zip, full_path, ZIP_FL_UNCHANGED);
