@@ -10,6 +10,7 @@
 #include "epub.h"
 //#include "gtk_ui.h"
 #include "term_ui.h"
+#include "settings.h"
 
 char *home_dir;
 
@@ -134,12 +135,35 @@ void read_config_line (const char *line)
 
 int main (int argc, char **argv)
 {
+    int opt;
+    bool failure = false;
+
+    // -v verbose
+    while ((opt = getopt(argc, argv, "v")) != -1)
+    {
+        switch (opt)
+        {
+        case 'v':
+            verbose = true;
+            break;
+        default:
+            failure = true;
+            break;
+        }
+    }
+
+    if (failure)
+    {
+        printf("usage: ereader [-v] [filename]\n");
+        exit(0);
+    }
+
     read_config();
 
     // open requested book (cmd line arg)
-    if (argc > 1)
+    if (optind < argc)
     {
-        char *book = argv[1];
+        char *book = argv[argc - 1];
         printf("attempting to read %s\n", book);
         unsigned book_id;
         int result = load_book(book, &book_id);
