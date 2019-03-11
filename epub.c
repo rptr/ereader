@@ -85,7 +85,7 @@ int load_epub (char *filename, bookid book)
             parts = next;
         }
 
-        printf("epub: looking for files in %s\n", directory);
+//        printf("epub: looking for files in %s\n", directory);
 
         // get the actual html page file names from the content.opf file
         // 1. find position of ".html"
