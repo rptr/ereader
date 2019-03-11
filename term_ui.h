@@ -37,6 +37,7 @@ void scroll_up ();
 void scroll_down ();
 void page_up ();
 void page_down ();
+void change_selection (int amount);
 
 /*
  */
