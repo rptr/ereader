@@ -318,6 +318,7 @@ void page_up ()
 {
     if (state == BOOK)
     {
+        selection -= 10;
     }
 }
 
@@ -325,6 +326,8 @@ void page_down ()
 {
     if (state == BOOK)
     {
+        selection += 10;
+    }
     }
 }
 
