@@ -11,6 +11,7 @@
 //#include "gtk_ui.h"
 #include "term_ui.h"
 #include "settings.h"
+#include "html2text.h"
 
 char *home_dir;
 
