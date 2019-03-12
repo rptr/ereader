@@ -1,6 +1,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <stdio.h>
+
 extern int verbose;
 
 #define dbgprintf(...) \
