@@ -17,8 +17,6 @@ remove_junk (const char *html)
 
     f = fopen("temp", "w");
 
-    printf("sizeof html %u\n", strlen(html));
-
     if (f == NULL)
     {
         dbgprintf("html_to_text: can't open temp\n");
@@ -103,17 +101,17 @@ html_to_text (const char *html, char **ascii, unsigned *length)
         {
             close(fd[1]);
 
-            int poop;
+            int readn;
             int size = 1000000;
             int total_size = 0;
             char buf[size];
 
-            while ((poop = read(fd[0], buf, size)))
+            while ((readn = read(fd[0], buf, size)))
             {
                 char tmp[total_size];
                 memcpy(tmp, *ascii, total_size);
 
-                total_size += poop;
+                total_size += readn;
 
                 if (*ascii)
                 {
@@ -121,13 +119,12 @@ html_to_text (const char *html, char **ascii, unsigned *length)
                 }
 
                 *ascii = malloc(total_size + 1);
-                memcpy(*ascii, tmp, total_size - poop);
-                memcpy(*ascii + total_size - poop, buf, poop);
+                memcpy(*ascii, tmp, total_size - readn);
+                memcpy(*ascii + total_size - readn, buf, readn);
                 (*ascii)[total_size] = '\0';
             }
 
             *length = total_size;
-            printf("recvtotal %d\n", total_size);
 
             char fn[100];
             sprintf(fn, "C%d", total_size);

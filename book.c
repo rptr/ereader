@@ -208,8 +208,6 @@ int add_section (bookid book, char *text, unsigned length)
 
     books[book].body[books[book].body_size] = '\0';
 
-    printf("new len %d\n", books[book].body_size);
-
     return 0;
 }
 
