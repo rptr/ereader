@@ -178,7 +178,7 @@ int main (int argc, char **argv)
 
     } else
     {
-//        find_titles_in_dir(home_dir);
+        find_titles_in_dir(home_dir);
         find_local_titles();
     }
 
