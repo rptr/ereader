@@ -59,46 +59,7 @@ remove_junk (const char *html)
         }
         else
         {
-            int total_size = 0;
-            int size = 1000000;
-            char buf[size];
-            char *final = NULL;
-            FILE    *f;
-            int readn;
-
-            while ((readn = read(fd[0], buf, size)))
-            {
-                printf("recv %d\n", readn);
-                // XXX copy paste
-                char tmp[total_size];
-                memcpy(tmp, final, total_size);
-
-                total_size += readn;
-
-                if (final)
-                {
-                    free(final);
-                }
-
-                final = malloc(total_size + 1);
-                memcpy(final, tmp, total_size - readn);
-                memcpy(final + total_size - readn, buf, readn);
-                final[total_size] = '\0';
-            }
-
-            system("rm temp");
-            f = fopen("temp", "w");
-
-            if (f == NULL)
-            {
-                dbgprintf("html_to_text: can't open temp\n");
-                success = 2;
-            }
-            else if (final)
-            {
-                fprintf(f, "%s\r", final);
-                fclose(f);
-            }
+            // parent
         }
     }
 
@@ -130,7 +91,7 @@ html_to_text (const char *html, char **ascii, unsigned *length)
             close(fd[0]);
             dup2(fd[1], 1);
 
-            if ((err = execl("html2text-1.3.2a/html2text", "html2text", "-ascii", "-nobs", "temp", NULL)) != -1)
+            if ((err = execl("html2text-1.3.2a/html2text", "html2text", "-ascii", "-nobs", "temp2", NULL)) != -1)
             {
             } else
             {
