@@ -329,6 +329,7 @@ replace_sgml_entities(string *s)
      * Skip characters before ampersand.
      */
     while (j < l && s->at(j) != '&') ++j;
+
     /*
      * We could convert high-bit chars to "&#233;" here if use_iso8859
      * is off, then let them be translated or not.  Is the purpose of

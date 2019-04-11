@@ -61,6 +61,7 @@ void resize_library ()
     } else if (num_books >= max_books)
     {
         max_books *= 2;
+        // XXX TODO you are not fuckng copying over the old books
         free(books);
         books = malloc(max_books * sizeof(ebook));
     }
@@ -174,38 +175,40 @@ const char *get_title (bookid id)
 /*
  * 
  */
-int add_section (bookid book, char *text)
+int add_section (bookid book, char *text, unsigned length)
 {
     if (text == NULL)
     {
-        printf("book.c::add_section(): no text\n");
+        dbgprintf("book.c::add_section(): no text\n");
         return 1;
     }
 
-    dbgprintf("add section book id: %d. len: %d\n", book, strlen(text));
+    dbgprintf("add section book id: %d. len: %u\n", book, length);
 
     if (books[book].body != NULL)
     {
         char *new;
-        int old_len;
-        int new_len;
+        int old_len = books[book].body_size;
+        int new_len = old_len + length;
 
-        old_len = strlen(books[book].body);
-        new_len = strlen(text);
-        new = malloc(old_len + new_len + 1);
-        strncpy(new, books[book].body, old_len);
-        strncpy(new + old_len, text, new_len);
-        new[new_len + old_len] = '\0';
-    
+        new = malloc(new_len + 1);
+        memcpy(new, books[book].body, old_len);
+        memcpy(new + old_len, text, length);
+
         free(books[book].body);
-
         books[book].body = new;
+        books[book].body_size = new_len;
 
     } else
     {
-        books[book].body = malloc(strlen(text));
+        books[book].body = malloc(length + 1);
         strcpy(books[book].body, text);
+        books[book].body_size = length;
     }
+
+    books[book].body[books[book].body_size] = '\0';
+
+    printf("new len %d\n", books[book].body_size);
 
     return 0;
 }
@@ -254,7 +257,7 @@ const char *get_body (bookid id)
     if (id >= num_books)
     {
         printf("book.c::get_page(): invalid book %d\n", id);
-        return 2;
+        return 0;
     }
 
     return books[id].body;
@@ -263,6 +266,18 @@ const char *get_body (bookid id)
 unsigned get_num_books ()
 {
     return num_books;
+}
+
+void books_cleanup ()
+{
+    for (int i = 0; i < num_books; i ++)
+    {
+        free(books[i].title);
+//        free(books[i].author);
+        free(books[i].body);
+    }
+
+    free(books);
 }
 
 

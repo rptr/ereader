@@ -6,6 +6,6 @@
  * puts formatted plaintext in *ascii.
  * Returns 0 on success.
  */
-int html_to_text (const char *html, char **ascii);
+int html_to_text (const char *html, char **ascii, unsigned *length);
 
 #endif

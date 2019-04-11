@@ -197,9 +197,7 @@ int list_titles ()
 
 int display_book ()
 {
-    char *text = NULL;
-    int length;
-    int result;
+    const char *text = NULL;
     const char *title = get_title(current_book);
     int w;
     int h;
@@ -210,7 +208,6 @@ int display_book ()
     getmaxyx(stdscr, h, w);
     w2 = w - 2 - padding_x * 2;
     h2 = h - 2 - padding_y * 2;
-    length = w2 * h2;
 
     text = get_body(current_book) + book_page * 500;
 

@@ -21,6 +21,7 @@ typedef struct
     char        *title;
     char        *author;
     char        *body;
+    unsigned    body_size;
 
 } ebook;
 
@@ -58,7 +59,7 @@ int init_ebook (unsigned *id);
  */
 int get_ebook (unsigned id, ebook *book);
 
-int add_section (bookid book, char *text);
+int add_section (bookid book, char *text, unsigned length);
 
 /*
  * Copies a page of length <length> into <text> with offset <page> * <length>
@@ -79,5 +80,7 @@ unsigned get_num_books ();
  * Returns title of book.
  */
 const char *book_title (bookid id);
+
+void books_cleanup ();
 
 #endif

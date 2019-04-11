@@ -1,6 +1,7 @@
 #include "book.h"
 #include "epub.h"
 #include "settings.h"
+#include "html2text.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -33,13 +34,13 @@ int load_epub (char *filename, bookid book)
     // XXX magic number -- what's the MAX_PATH thing?
     char *directory = NULL;
 
-    struct zip_t *fd = zip_open(filename, ZIP_RDONLY | ZIP_CHECKCONS, &error);
+    zip_t *fd = zip_open(filename, ZIP_RDONLY | ZIP_CHECKCONS, &error);
 
     if (fd == NULL)
     {
         zip_error_t e_msg;
         zip_error_init_with_code(&e_msg, error);
-        dbgprintf("could not open epub: %s. Error: %s\n", filename, zip_error_strerror(&e_msg));
+        dbgprintf("could not open epub: %s    ERROR: %s\n", filename, zip_error_strerror(&e_msg));
         zip_error_fini(&e_msg);
         return 1;
 
@@ -286,10 +287,11 @@ int load_file (zip_t *zip, bookid book, char *filename, char *directory)
         } else
         {
             char *plain = NULL;
+            unsigned length;
         
             section[total_size] = '\0';
-            html_to_plain(section, &plain);
-            add_section(book, plain);
+            html_to_plain(section, &plain, &length);
+            add_section(book, plain, length);
         }
 
         zip_fclose(file);
@@ -303,37 +305,43 @@ int load_file (zip_t *zip, bookid book, char *filename, char *directory)
     return 0;
 }
 
-int html_to_plain (const char *html, char **plain)
+int html_to_plain (const char *html, char **plain, unsigned *length)
 {
-    int len = strlen(html);
-    char *clean = malloc(len * sizeof(char));
-    bool rmv = false;
-    int j = 0;
+    int success;
 
-    // remove < > tags
-    for (int i = 0; i < len; i ++)
-    {
-        if (html[i] == '<')
-        {
-            rmv = true;
-        }
+    success = html_to_text(html, plain, length);
 
-        if (!rmv)
-        {
-            clean[j] = html[i];
-            j ++;
-        }
+    return success;
 
-        if (html[i] == '>')
-        {
-            rmv = false;
-        }
-    }
+    /* int len = strlen(html); */
+    /* char *clean = malloc(len * sizeof(char)); */
+    /* bool rmv = false; */
+    /* int j = 0; */
 
-    *plain = malloc(len * sizeof(char));
-    strncpy(*plain, clean, len);
+    /* // remove < > tags */
+    /* for (int i = 0; i < len; i ++) */
+    /* { */
+    /*     if (html[i] == '<') */
+    /*     { */
+    /*         rmv = true; */
+    /*     } */
 
-    return 0;
+    /*     if (!rmv) */
+    /*     { */
+    /*         clean[j] = html[i]; */
+    /*         j ++; */
+    /*     } */
+
+    /*     if (html[i] == '>') */
+    /*     { */
+    /*         rmv = false; */
+    /*     } */
+    /* } */
+
+    /* *plain = malloc(len * sizeof(char)); */
+    /* strncpy(*plain, clean, len); */
+
+    /* return 0; */
 }
 
 
