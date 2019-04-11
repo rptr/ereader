@@ -125,44 +125,6 @@ html_to_text (const char *html, char **ascii, unsigned *length)
             }
 
             *length = total_size;
-
-            char fn[100];
-            sprintf(fn, "C%d", total_size);
-            FILE *f = fopen(fn, "w");
-
-            if (f)
-            {
-                fwrite(*ascii, 1, total_size, f);
-            }
-
-            fclose(f);
-
-            // better way to do this? TODO
-//            while ((f = fopen("ascii", "r")) == NULL && tries < 100)
-//            {
-//                sleep(0.1);
-//                tries ++;
-//            }
-//
-//            if (tries == 100)
-//            {
-//                dbgprintf("html2text error: could not open ascii\n");
-//
-//            } else
-//            {
-//                long int len;
-//
-//                fseek(f, 0, SEEK_END);
-//                len = ftell(f);
-//                rewind(f);
-//                *ascii = malloc(len + 1);
-//                fread((char *) *ascii, 1, len, f);
-//                (*ascii)[len] = '\0';
-//                fclose(f);
-//
-//                printf("html2text len %ld %s\n", len, *ascii);
-////                system("rm ascii");
-//            }
         }
     }
 
