@@ -165,9 +165,10 @@ int main (int argc, char **argv)
     if (optind < argc)
     {
         char *book = argv[argc - 1];
-        printf("attempting to read %s\n", book);
         unsigned book_id;
         int result = load_book(book, &book_id);
+
+        printf("attempting to read %s\n", book);
 
         if (result != 0)
         {
@@ -177,11 +178,13 @@ int main (int argc, char **argv)
 
     } else
     {
-        find_titles_in_dir(home_dir);
+//        find_titles_in_dir(home_dir);
         find_local_titles();
     }
 
     ui_start();
+
+    books_cleanup();
 
     return 0;
 }
