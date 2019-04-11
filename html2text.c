@@ -89,7 +89,10 @@ html_to_text (const char *html, char **ascii, unsigned *length)
             close(fd[0]);
             dup2(fd[1], 1);
 
-            if ((err = execl("html2text-1.3.2a/html2text", "html2text", "-ascii", "-nobs", "temp2", NULL)) != -1)
+            if ((err = execl("html2text-1.3.2a/html2text", "html2text", 
+                            "-ascii", "-nobs", 
+                            "-style", "pretty",
+                            "temp2", NULL)) != -1)
             {
             } else
             {
@@ -102,6 +105,7 @@ html_to_text (const char *html, char **ascii, unsigned *length)
             close(fd[1]);
 
             int readn;
+            // TODO no.
             int size = 1000000;
             int total_size = 0;
             char buf[size];
